@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: ee563f9d570e1a84f8a819be4dc43cf3
+guid: ba50e19589a930f46af9a5eda8ba05c6
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 9022682584070108516
-    second: AMERICAN DINER (1)_0
+      213: 8223760342256937110
+    second: room_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -139,13 +139,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: AMERICAN DINER (1)_0
+      name: room_0
       rect:
         serializedVersion: 2
-        x: 269
+        x: 5
         y: 0
-        width: 5662
-        height: 4581
+        width: 568
+        height: 459
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -154,8 +154,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4653a988102073d70800000000000000
-      internalID: 9022682584070108516
+      spriteID: 6986b2eb57aa02270800000000000000
+      internalID: 8223760342256937110
       vertices: []
       indices: 
       edges: []
@@ -174,7 +174,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      AMERICAN DINER (1)_0: 9022682584070108516
+      room_0: 8223760342256937110
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
