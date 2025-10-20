@@ -9,7 +9,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public string itemType = "Default";   // Used to match with SnapZone
 
     [Header("Behaviour")]
-    public bool lockOnSnap = true;        // Lock the object after a successful snap
+    public bool lockOnSnap = false;        // Lock the object after a successful snap
     public int dragSortingOrder = 100;    // Sorting order when dragging above others
     public float snapMoveSpeed = 0f;      // >0 = smooth move (Lerp), =0 = instant snap
 
@@ -45,7 +45,15 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
 		// If currently in a SnapZone, free it when starting to drag out
 		var parentZone = transform.parent != null ? transform.parent.GetComponent<SnapZone>() : null;
-		if (parentZone != null) parentZone.occupied = false;
+		if (parentZone != null)
+		{
+			parentZone.occupied = false;
+			parentZone.currentItem = null;
+		}
+
+		// If currently in a GridCell, free that cell when starting to drag
+		var parentCell = transform.parent != null ? transform.parent.GetComponent<GridCell>() : null;
+		if (parentCell != null) parentCell.SetOccupied(null);
 
         // Ensure CanvasGroup exists for UI-based raycast blocking
         if (rectTransform != null && canvasGroup == null)
@@ -119,7 +127,6 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         else
         {
             // Successfully placed
-            if (lockOnSnap) enabled = false;
             onPlaced?.Invoke();
         }
 
