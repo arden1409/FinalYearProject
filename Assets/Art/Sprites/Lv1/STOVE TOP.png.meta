@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 43272613d49495e4ca6f38cb1f845cc9
+guid: a8466bd9feb65414b8795ce858e27ccc
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2483599130862072393
-    second: BAR _0
+      213: -2849752177172489896
+    second: STOVE TOP_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -139,13 +139,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: BAR _0
+      name: STOVE TOP_0
       rect:
         serializedVersion: 2
-        x: 1549
-        y: 1649
-        width: 3102
-        height: 1162
+        x: 1719
+        y: 2449
+        width: 732
+        height: 712
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -154,8 +154,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 942b0873044877220800000000000000
-      internalID: 2483599130862072393
+      spriteID: 859dcb55e75a378d0800000000000000
+      internalID: -2849752177172489896
       vertices: []
       indices: 
       edges: []
@@ -174,7 +174,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      BAR _0: 2483599130862072393
+      STOVE TOP_0: -2849752177172489896
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -90,7 +90,6 @@ public class GridSnapZone : MonoBehaviour, IDropHandler
 			return;
 		}
 
-		// Snap to cell
 		di.SnapTo(targetCell.transform);
 		targetCell.SetOccupied(di);
 	}
@@ -176,6 +175,34 @@ public class GridSnapZone : MonoBehaviour, IDropHandler
 		Gizmos.DrawLine(p1, p2);
 		Gizmos.DrawLine(p2, p3);
 		Gizmos.DrawLine(p3, p0);
+	}
+
+	public int GetOccupiedCellsCount()
+	{
+		int count = 0;
+		if (cells == null) return 0;
+		
+		for (int y = 0; y < rows; y++)
+		{
+			for (int x = 0; x < columns; x++)
+			{
+				if (cells[x, y] != null && cells[x, y].occupied)
+				{
+					count++;
+				}
+			}
+		}
+		return count;
+	}
+
+	public bool IsFull()
+	{
+		return GetOccupiedCellsCount() >= (columns * rows);
+	}
+
+	public int GetTotalCells()
+	{
+		return columns * rows;
 	}
 }
 

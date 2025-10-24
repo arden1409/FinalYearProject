@@ -6,21 +6,21 @@ using UnityEngine.EventSystems;
 public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     [Header("Identification")]
-    public string itemType = "Default";   // Used to match with SnapZone
+    public string itemType = "Default";
 
     [Header("Behaviour")]
-    public bool lockOnSnap = false;        // Lock the object after a successful snap
-    public int dragSortingOrder = 100;    // Sorting order when dragging above others
-    public float snapMoveSpeed = 0f;      // >0 = smooth move (Lerp), =0 = instant snap
+    public bool lockOnSnap = false;
+    public int dragSortingOrder = 100;
+    public float snapMoveSpeed = 8f;
 
-    [Header("Events (optional)")]
+    [Header("Events")]
     public UnityEvent onPlaced;
     public UnityEvent onReset;
 
-    // Internals
+    // Private variables
     private Vector3 originalPosition;
     private Transform originalParent;
-	private int originalSiblingIndex;
+    private int originalSiblingIndex;
     private SpriteRenderer spriteRenderer;
     private RectTransform rectTransform;
     private Canvas parentCanvas;
@@ -41,21 +41,13 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         isSnapped = false;
         originalPosition = transform.position;
         originalParent = transform.parent;
-		originalSiblingIndex = transform.GetSiblingIndex();
+        originalSiblingIndex = transform.GetSiblingIndex();
 
-		// If currently in a SnapZone, free it when starting to drag out
-		var parentZone = transform.parent != null ? transform.parent.GetComponent<SnapZone>() : null;
-		if (parentZone != null)
-		{
-			parentZone.occupied = false;
-			parentZone.currentItem = null;
-		}
+        // Free current cell when starting to drag
+        var parentCell = transform.parent != null ? transform.parent.GetComponent<GridCell>() : null;
+        if (parentCell != null) parentCell.SetOccupied(null);
 
-		// If currently in a GridCell, free that cell when starting to drag
-		var parentCell = transform.parent != null ? transform.parent.GetComponent<GridCell>() : null;
-		if (parentCell != null) parentCell.SetOccupied(null);
-
-        // Ensure CanvasGroup exists for UI-based raycast blocking
+        // Setup UI blocking for drag
         if (rectTransform != null && canvasGroup == null)
             canvasGroup = gameObject.AddComponent<CanvasGroup>();
 
@@ -65,14 +57,14 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             canvasGroup.alpha = 0.9f;
         }
 
-        // Bring the sprite to the front while dragging
+        // Bring sprite to front while dragging
         if (spriteRenderer != null)
         {
             originalSortingOrder = spriteRenderer.sortingOrder;
             spriteRenderer.sortingOrder = dragSortingOrder;
         }
 
-        // For UI elements, reparent temporarily to the root canvas for overlay
+        // Reparent UI elements to canvas for overlay
         if (rectTransform != null && parentCanvas != null && parentCanvas.renderMode != RenderMode.WorldSpace)
         {
             transform.SetParent(parentCanvas.transform, true);
@@ -81,21 +73,22 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void OnDrag(PointerEventData eventData)
     {
-        // UI drag path (for Canvas overlay mode)
-		if (rectTransform != null && parentCanvas != null && parentCanvas.renderMode != RenderMode.WorldSpace)
+        // Handle UI elements
+        if (rectTransform != null && parentCanvas != null && parentCanvas.renderMode != RenderMode.WorldSpace)
         {
             RectTransform canvasRect = parentCanvas.transform as RectTransform;
             Vector2 localPoint;
             if (RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, eventData.position, parentCanvas.worldCamera, out localPoint))
             {
-				rectTransform.anchoredPosition = localPoint;
+                rectTransform.anchoredPosition = localPoint;
             }
             return;
         }
 
-        // World-space drag path (for sprites)
+        // Handle world space sprites
         Camera cam = eventData.pressEventCamera ?? Camera.main;
         if (cam == null) return;
+        
         float z = cam.WorldToScreenPoint(transform.position).z;
         Vector3 screenPoint = new Vector3(eventData.position.x, eventData.position.y, z);
         Vector3 worldPos = cam.ScreenToWorldPoint(screenPoint);
@@ -116,17 +109,25 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     private IEnumerator EndDragCoroutine()
     {
-        // Wait a frame to allow SnapZone's OnDrop to process first
         yield return new WaitForEndOfFrame();
 
         if (!isSnapped)
         {
-            // If not snapped, return to original position
-            ResetPosition();
+            // Try to find and snap to nearest GridSnapZone
+            GridSnapZone snapZone = FindGridSnapZoneAtPosition(transform.position);
+            if (snapZone != null)
+            {
+                PointerEventData eventData = new PointerEventData(UnityEngine.EventSystems.EventSystem.current);
+                eventData.pointerDrag = gameObject;
+                snapZone.OnDrop(eventData);
+            }
+            else
+            {
+                ResetPosition();
+            }
         }
         else
         {
-            // Successfully placed
             onPlaced?.Invoke();
         }
 
@@ -135,45 +136,52 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             spriteRenderer.sortingOrder = originalSortingOrder;
     }
 
-    // Called by SnapZone when a valid snap occurs
+    private GridSnapZone FindGridSnapZoneAtPosition(Vector3 position)
+    {
+        GridSnapZone[] zones = FindObjectsOfType<GridSnapZone>();
+        
+        foreach (var zone in zones)
+        {
+            Collider2D col = zone.GetComponent<Collider2D>();
+            if (col != null && col.bounds.Contains(position))
+            {
+                return zone;
+            }
+        }
+        return null;
+    }
+
     public void SnapTo(Transform snapTarget)
     {
         isSnapped = true;
+        bool isUI = rectTransform != null && snapTarget.GetComponent<RectTransform>() != null;
 
-		bool isUI = rectTransform != null && snapTarget.GetComponent<RectTransform>() != null;
-
-		if (isUI)
-		{
-			// Adopt local space of target for UI
-			transform.SetParent(snapTarget, false);
-			if (snapMoveSpeed <= 0f)
-			{
-				// Instant snap in UI local space
-				rectTransform.anchoredPosition = Vector2.zero;
-			}
-			else
-			{
-				// Smooth move in UI local space
-				StopCoroutine(nameof(SmoothMove));
-				StopCoroutine(nameof(SmoothMoveLocalUI));
-				StartCoroutine(SmoothMoveLocalUI(Vector2.zero, 1f / snapMoveSpeed));
-			}
-		}
-		else
-		{
-			// World-space objects keep world position logic
-			transform.SetParent(snapTarget, true);
-			if (snapMoveSpeed <= 0f)
-			{
-				transform.position = snapTarget.position;
-			}
-			else
-			{
-				StopCoroutine(nameof(SmoothMove));
-				StopCoroutine(nameof(SmoothMoveLocalUI));
-				StartCoroutine(SmoothMove(snapTarget.position, 1f / snapMoveSpeed));
-			}
-		}
+        if (isUI)
+        {
+            transform.SetParent(snapTarget, false);
+            if (snapMoveSpeed <= 0f)
+            {
+                rectTransform.anchoredPosition = Vector2.zero;
+            }
+            else
+            {
+                StopAllCoroutines();
+                StartCoroutine(SmoothMoveLocalUI(Vector2.zero, 1f / snapMoveSpeed));
+            }
+        }
+        else
+        {
+            transform.SetParent(snapTarget, true);
+            if (snapMoveSpeed <= 0f)
+            {
+                transform.position = snapTarget.position;
+            }
+            else
+            {
+                StopAllCoroutines();
+                StartCoroutine(SmoothMove(snapTarget.position, 1f / snapMoveSpeed));
+            }
+        }
 
         if (spriteRenderer != null)
         {
@@ -194,26 +202,25 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         transform.position = targetPos;
     }
 
-    // Reset object to original position/parent
     public void ResetPosition()
     {
         isSnapped = false;
         transform.SetParent(originalParent, true);
         transform.position = originalPosition;
-		transform.SetSiblingIndex(originalSiblingIndex);
+        transform.SetSiblingIndex(originalSiblingIndex);
         onReset?.Invoke();
     }
 
-	private IEnumerator SmoothMoveLocalUI(Vector2 targetAnchoredPos, float duration)
-	{
-		Vector2 start = rectTransform.anchoredPosition;
-		float t = 0f;
-		while (t < 1f)
-		{
-			t += Time.deltaTime / duration;
-			rectTransform.anchoredPosition = Vector2.Lerp(start, targetAnchoredPos, t);
-			yield return null;
-		}
-		rectTransform.anchoredPosition = targetAnchoredPos;
-	}
+    private IEnumerator SmoothMoveLocalUI(Vector2 targetAnchoredPos, float duration)
+    {
+        Vector2 start = rectTransform.anchoredPosition;
+        float t = 0f;
+        while (t < 1f)
+        {
+            t += Time.deltaTime / duration;
+            rectTransform.anchoredPosition = Vector2.Lerp(start, targetAnchoredPos, t);
+            yield return null;
+        }
+        rectTransform.anchoredPosition = targetAnchoredPos;
+    }
 }
