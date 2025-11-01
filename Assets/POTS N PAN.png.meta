@@ -1,16 +1,16 @@
 fileFormatVersion: 2
-guid: 26238c6d3e610734c9f2219520e31d8f
+guid: 442041e7a79d63c4fbeff606cf2d3f19
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1248818623350402522
-    second: POTS AND PANS _0
+      213: -5836537757982782597
+    second: POTS N PAN_0
   - first:
-      213: -4007856188565991437
-    second: POTS AND PANS _1
+      213: 9116873998980564377
+    second: POTS N PAN_1
   - first:
-      213: 3110180589921917046
-    second: POTS AND PANS _2
+      213: 8620781657714882925
+    second: POTS N PAN_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -145,11 +145,11 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: POTS AND PANS _0
+      name: POTS N PAN_0
       rect:
         serializedVersion: 2
-        x: 1649
-        y: 3609
+        x: 2909
+        y: 3299
         width: 262
         height: 252
       alignment: 0
@@ -160,18 +160,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: add61b1ebe1b45110800000000000000
-      internalID: 1248818623350402522
+      spriteID: b7b084915d3700fa0800000000000000
+      internalID: -5836537757982782597
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: POTS AND PANS _1
+      name: POTS N PAN_1
       rect:
         serializedVersion: 2
-        x: 1899
-        y: 3469
+        x: 3159
+        y: 3159
         width: 282
         height: 262
       alignment: 0
@@ -182,18 +182,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3ff4ca1f70c3168c0800000000000000
-      internalID: -4007856188565991437
+      spriteID: 9954b3b4994a58e70800000000000000
+      internalID: 9116873998980564377
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: POTS AND PANS _2
+      name: POTS N PAN_2
       rect:
         serializedVersion: 2
-        x: 1469
-        y: 3409
+        x: 2729
+        y: 3099
         width: 412
         height: 162
       alignment: 0
@@ -204,8 +204,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6785c91a4c4992b20800000000000000
-      internalID: 3110180589921917046
+      spriteID: d697c4a2e3b23a770800000000000000
+      internalID: 8620781657714882925
       vertices: []
       indices: 
       edges: []
@@ -224,9 +224,9 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      POTS AND PANS _0: 1248818623350402522
-      POTS AND PANS _1: -4007856188565991437
-      POTS AND PANS _2: 3110180589921917046
+      POTS N PAN_0: -5836537757982782597
+      POTS N PAN_1: 9116873998980564377
+      POTS N PAN_2: 8620781657714882925
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

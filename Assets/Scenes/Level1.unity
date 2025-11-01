@@ -198,109 +198,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &475515522
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 475515525}
-  - component: {fileID: 475515526}
-  - component: {fileID: 475515524}
-  m_Layer: 5
-  m_Name: GridCanvas
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &475515524
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 475515522}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ada9f296690171c4f856084510d614c4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GridSnapZone
-  columns: 19
-  rows: 19
-  cellSize: {x: 0.2, y: 0.2}
-  cellSpacing: {x: 0, y: 0}
-  acceptType: Default
-  requireExactMatch: 1
-  drawGizmos: 1
-  gizmoOutlineColor: {r: 1, g: 0, b: 1, a: 1}
-  gizmoCellColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  isIsometric: 1
-  isoTileSize: {x: 0.5, y: 0.25}
-  isoColumnYOffset: 0
---- !u!4 &475515525
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 475515522}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 964, y: 41, z: 0}
-  m_LocalScale: {x: 160.18568, y: 160.18568, z: 160.18568}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &475515526
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 475515522}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
 --- !u!1 &621599492
 GameObject:
   m_ObjectHideFlags: 0
@@ -313,7 +210,7 @@ GameObject:
   - component: {fileID: 621599495}
   - component: {fileID: 621599494}
   - component: {fileID: 621599493}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -413,7 +310,7 @@ GameObject:
   - component: {fileID: 726122607}
   - component: {fileID: 726122606}
   - component: {fileID: 726122605}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: RoomZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -478,7 +375,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ada9f296690171c4f856084510d614c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GridSnapZone
-  columns: 19
+  columns: 20
   rows: 19
   cellSize: {x: 0.2, y: 0.2}
   cellSpacing: {x: 0, y: 0}
@@ -515,7 +412,7 @@ GameObject:
   m_Component:
   - component: {fileID: 762155993}
   - component: {fileID: 762155992}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Room
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -589,8 +486,8 @@ Transform:
   m_GameObject: {fileID: 762155991}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 943, y: 542, z: 0}
-  m_LocalScale: {x: 22, y: 22, z: 22}
+  m_LocalPosition: {x: 943, y: 540.4983, z: 0}
+  m_LocalScale: {x: 22, y: 22.066, z: 22}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -674,8 +571,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CardboardBox
   itemsToSpawn:
   - {fileID: 8702842730668122307, guid: 499bf53135fad0c41b33546cdb6617fe, type: 3}
+  - {fileID: 9178962847618945362, guid: b94c040726ce74e458b7fcc5124ff867, type: 3}
+  - {fileID: 1023655028982913118, guid: 57c4d715e3fcb0b4385875d633f77446, type: 3}
+  - {fileID: 7376015800535272144, guid: 7ae7e0860f108b2489069fdb8dd6f859, type: 3}
+  - {fileID: 4821417006005749339, guid: c0c621b171e46e2459ee5f7e4729597f, type: 3}
+  - {fileID: 790605417299307907, guid: 37956c7fde30aa74585611403e05cc70, type: 3}
+  - {fileID: 1487657813561053480, guid: 14564ff322abad24c8965e968a64b436, type: 3}
+  - {fileID: 3129286026201303801, guid: ad8dcda577c7e2a47b3666375b7ec2a8, type: 3}
+  - {fileID: 3062297458702394359, guid: 6a258677e5a606843b9d85afa9c51b78, type: 3}
+  - {fileID: 763305340560282380, guid: 0e4a8677a94e44341be2049b26507a80, type: 3}
+  - {fileID: 6781917921701055244, guid: c30b732ba566ae640bd9f84228496d62, type: 3}
+  - {fileID: 1807252767710115046, guid: a918ed08ec4904a4c9b5331f5e60b5eb, type: 3}
+  - {fileID: 8351280783212875146, guid: 0cbbf1f899724f14cb7cac39af774dbf, type: 3}
+  - {fileID: 4281290694120171711, guid: da393213cc927374b86625aea8ae5fb5, type: 3}
+  - {fileID: 3115642929329682673, guid: 85131dd058a144e49be7fcd82a9c0b37, type: 3}
+  - {fileID: 561729344935690650, guid: 87c363650caf8e842b81d8e795e43663, type: 3}
+  - {fileID: 5876426050568955944, guid: a26c3cefabb56e049b622b82bdf87e7c, type: 3}
+  - {fileID: 7484146786524660570, guid: 69ce22d1c6e7f084a9ab1c2a7bd2f751, type: 3}
+  - {fileID: 3615020320404947798, guid: d7fee6ddf35dcef46bab204ed2aa0351, type: 3}
   spawnPoint: {fileID: 0}
-  spawnOffset: 0.5
+  spawnOffset: 5
+  loopItems: 0
+  temporaryIgnoreSeconds: 0.15
+  spiralStep: 0.3
+  temporaryIgnoreRaycast: 1
   highlightEffect: {fileID: 0}
   normalColor: {r: 1, g: 1, b: 1, a: 1}
   hoverColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
@@ -746,7 +665,7 @@ Transform:
   m_GameObject: {fileID: 1369727752}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 283, y: 177, z: 0}
+  m_LocalPosition: {x: 241, y: 186, z: 0}
   m_LocalScale: {x: 60, y: 60, z: 60}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -868,7 +787,6 @@ SceneRoots:
   - {fileID: 1914214257}
   - {fileID: 221179627}
   - {fileID: 621599496}
-  - {fileID: 475515525}
   - {fileID: 726122607}
   - {fileID: 762155993}
   - {fileID: 1369727756}
