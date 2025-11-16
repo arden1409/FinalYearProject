@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3136543383022207584}
   - component: {fileID: 7580377866955859568}
-  - component: {fileID: 8492342557906986838}
-  - component: {fileID: 2052203723644752176}
+  - component: {fileID: -3361874031997848918}
+  - component: {fileID: -2345526986159928811}
   m_Layer: 0
   m_Name: FRIDGE_0
   m_TagString: Untagged
@@ -92,36 +92,8 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8492342557906986838
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8351280783212875146}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4930ce976e773c94580a30531112376e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DraggableItem
-  itemType: Default
-  lockOnSnap: 0
-  dragSortingOrder: 100
-  snapMoveSpeed: 8
-  autoSortByY: 1
-  ySortFactor: 100
-  dragSortingBoost: 1000
-  showHoverOutline: 1
-  hoverOutlineColor: {r: 0, g: 1, b: 0.3, a: 0.8}
-  hoverOutlinePixels: 5
-  onPlaced:
-    m_PersistentCalls:
-      m_Calls: []
-  onReset:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!61 &2052203723644752176
-BoxCollider2D:
+--- !u!60 &-3361874031997848918
+PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -164,5 +136,76 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 6.22, y: 10.221338}
-  m_EdgeRadius: 0
+  m_Points:
+    m_Paths:
+    - - {x: 1.4191985, y: -4.8229938}
+      - {x: 1.6069915, y: -4.760396}
+      - {x: 1.700888, y: -4.6664996}
+      - {x: 2.264267, y: -4.3848104}
+      - {x: 2.420761, y: -4.3222127}
+      - {x: 2.608554, y: -4.259615}
+      - {x: 2.6711516, y: -4.1344194}
+      - {x: 3.0154388, y: -4.040523}
+      - {x: 3.140634, y: -3.884029}
+      - {x: 3.140634, y: 3.5337932}
+      - {x: 3.0780363, y: 3.7528849}
+      - {x: 2.7024505, y: 4.097172}
+      - {x: 2.3268645, y: 4.284965}
+      - {x: 1.9199798, y: 4.472758}
+      - {x: 1.700888, y: 4.629252}
+      - {x: 1.3253021, y: 4.817045}
+      - {x: 0.69932556, y: 5.0987344}
+      - {x: 0.57413024, y: 5.161332}
+      - {x: -0.17704163, y: 5.161332}
+      - {x: -0.3648346, y: 5.0361366}
+      - {x: -0.52132875, y: 4.9735394}
+      - {x: -0.9595123, y: 4.7544475}
+      - {x: -1.1160065, y: 4.6918497}
+      - {x: -1.3037994, y: 4.629252}
+      - {x: -1.3976959, y: 4.504057}
+      - {x: -1.7106842, y: 4.41016}
+      - {x: -2.305362, y: 4.128471}
+      - {x: -2.3679595, y: 4.0032754}
+      - {x: -2.7122467, y: 3.909379}
+      - {x: -3.0565338, y: 3.5650918}
+      - {x: -3.1191313, y: 3.4085977}
+      - {x: -3.1191313, y: -3.2893512}
+      - {x: -3.025235, y: -3.4145465}
+      - {x: -0.39613342, y: -4.7290974}
+      - {x: 0.38633725, y: -5.1046834}
+      - {x: 0.85581964, y: -5.1046834}
+      - {x: 1.0123138, y: -5.0420856}
+      - {x: 1.2001067, y: -4.91689}
+      - {x: 1.2627044, y: -4.8855915}
+  m_UseDelaunayMesh: 0
+--- !u!114 &-2345526986159928811
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8351280783212875146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f532df6ee761a244ba445ba8f8419753, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FreeDraggableItem
+  itemType: Default
+  dragSortingOrder: 100
+  autoSortByY: 0
+  ySortFactor: 100
+  dragSortingBoost: 1000
+  showHoverOutline: 1
+  hoverOutlineColor: {r: 0, g: 1, b: 0, a: 0.9}
+  hoverOutlinePixels: 2
+  onDragStart:
+    m_PersistentCalls:
+      m_Calls: []
+  onDragEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  onPlaced:
+    m_PersistentCalls:
+      m_Calls: []
+  keepDroppedPosition: 1
+  bringToFrontOnClick: 1

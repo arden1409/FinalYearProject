@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2791132820646060581}
   - component: {fileID: 9031171090668795552}
-  - component: {fileID: 4299056935057098523}
-  - component: {fileID: 2274646638200335476}
+  - component: {fileID: -8025292380192413081}
+  - component: {fileID: -5042107898722045326}
   m_Layer: 0
   m_Name: RADIO _0
   m_TagString: Untagged
@@ -78,8 +78,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: -2135236901
-  m_SortingLayer: 2
+  m_SortingLayerID: -2071319887
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 4965542843009992882, guid: 9eb38c3800260b84b930a58274bae491, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -92,7 +92,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &4299056935057098523
+--- !u!114 &-8025292380192413081
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -101,27 +101,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 561729344935690650}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4930ce976e773c94580a30531112376e, type: 3}
+  m_Script: {fileID: 11500000, guid: f532df6ee761a244ba445ba8f8419753, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DraggableItem
-  itemType: any
-  lockOnSnap: 0
+  m_EditorClassIdentifier: Assembly-CSharp::FreeDraggableItem
+  itemType: Default
   dragSortingOrder: 100
-  snapMoveSpeed: 8
-  autoSortByY: 1
+  autoSortByY: 0
   ySortFactor: 100
   dragSortingBoost: 1000
   showHoverOutline: 1
-  hoverOutlineColor: {r: 0, g: 1, b: 0.3, a: 0.8}
-  hoverOutlinePixels: 5
+  hoverOutlineColor: {r: 0, g: 1, b: 0, a: 0.9}
+  hoverOutlinePixels: 2
+  onDragStart:
+    m_PersistentCalls:
+      m_Calls: []
+  onDragEnd:
+    m_PersistentCalls:
+      m_Calls: []
   onPlaced:
     m_PersistentCalls:
       m_Calls: []
-  onReset:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!61 &2274646638200335476
-BoxCollider2D:
+  keepDroppedPosition: 1
+  bringToFrontOnClick: 1
+--- !u!60 &-5042107898722045326
+PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -164,5 +167,26 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 2.72, y: 3.2204218}
-  m_EdgeRadius: 0
+  m_Points:
+    m_Paths:
+    - - {x: 1.3282325, y: 0.22470625}
+      - {x: 1.0152442, y: 0.5063957}
+      - {x: 1.1091408, y: 0.6002922}
+      - {x: 1.1091408, y: 0.819384}
+      - {x: 0.9839454, y: 0.9445793}
+      - {x: -0.20541002, y: 1.539257}
+      - {x: -0.4245018, y: 1.6331534}
+      - {x: -0.6435936, y: 1.6331534}
+      - {x: -0.8626854, y: 1.539257}
+      - {x: -1.113076, y: 1.3201652}
+      - {x: -1.0504783, y: 1.1010734}
+      - {x: -1.1756737, y: 1.0697746}
+      - {x: -1.3634666, y: 0.8506828}
+      - {x: -1.3634666, y: -0.68295974}
+      - {x: -1.0504783, y: -0.9646492}
+      - {x: -0.048915878, y: -1.4654304}
+      - {x: 0.29537123, y: -1.6219245}
+      - {x: 1.1404395, y: -1.6219245}
+      - {x: 1.3908302, y: -1.3402351}
+      - {x: 1.3908302, y: 0.13080977}
+  m_UseDelaunayMesh: 0

@@ -1,16 +1,10 @@
 fileFormatVersion: 2
-guid: 5ff48fb352921ad4780ea64e925bf8a3
+guid: d3a6136858387ec4eaba4d2e8917bbde
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5836537757982782597
-    second: POTS N PAN_0
-  - first:
-      213: 9116873998980564377
-    second: POTS N PAN_1
-  - first:
-      213: 8620781657714882925
-    second: POTS N PAN_2
+      213: -198938125430884413
+    second: Menu_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -145,13 +139,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: POTS N PAN_0
+      name: Menu_0
       rect:
         serializedVersion: 2
-        x: 2909
-        y: 3299
-        width: 262
-        height: 252
+        x: 17
+        y: 12
+        width: 382
+        height: 415
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -160,52 +154,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b7b084915d3700fa0800000000000000
-      internalID: -5836537757982782597
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: POTS N PAN_1
-      rect:
-        serializedVersion: 2
-        x: 3159
-        y: 3159
-        width: 282
-        height: 262
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 9954b3b4994a58e70800000000000000
-      internalID: 9116873998980564377
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: POTS N PAN_2
-      rect:
-        serializedVersion: 2
-        x: 2729
-        y: 3099
-        width: 412
-        height: 162
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: d697c4a2e3b23a770800000000000000
-      internalID: 8620781657714882925
+      spriteID: 3c7f86534da3d3df0800000000000000
+      internalID: -198938125430884413
       vertices: []
       indices: 
       edges: []
@@ -224,9 +174,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      POTS N PAN_0: -5836537757982782597
-      POTS N PAN_1: 9116873998980564377
-      POTS N PAN_2: 8620781657714882925
+      Menu_0: -198938125430884413
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

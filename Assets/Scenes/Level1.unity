@@ -309,7 +309,7 @@ GameObject:
   m_Component:
   - component: {fileID: 726122607}
   - component: {fileID: 726122606}
-  - component: {fileID: 726122605}
+  - component: {fileID: 726122608}
   m_Layer: 1
   m_Name: RoomZone
   m_TagString: Untagged
@@ -317,8 +317,47 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!61 &726122605
-BoxCollider2D:
+--- !u!114 &726122606
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 726122604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ada9f296690171c4f856084510d614c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GridSnapZone
+  columns: 21
+  rows: 19
+  cellSize: {x: 0.2, y: 0.2}
+  cellSpacing: {x: 0, y: 0}
+  acceptType: any
+  requireExactMatch: 1
+  drawGizmos: 1
+  gizmoOutlineColor: {r: 0, g: 1, b: 1, a: 0.6}
+  gizmoCellColor: {r: 0, g: 1, b: 0.5, a: 0.8}
+  isIsometric: 1
+  isoTileSize: {x: 0.5, y: 0.25}
+  isoColumnYOffset: 0
+--- !u!4 &726122607
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 726122604}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 962.6, y: 41, z: 0}
+  m_LocalScale: {x: 162.3, y: 159.8, z: 160.1857}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!60 &726122608
+PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -347,11 +386,11 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 2.25}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -361,47 +400,14 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 10, y: 5}
-  m_EdgeRadius: 0
---- !u!114 &726122606
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 726122604}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ada9f296690171c4f856084510d614c4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GridSnapZone
-  columns: 20
-  rows: 19
-  cellSize: {x: 0.2, y: 0.2}
-  cellSpacing: {x: 0, y: 0}
-  acceptType: any
-  requireExactMatch: 0
-  drawGizmos: 1
-  gizmoOutlineColor: {r: 0, g: 1, b: 1, a: 0.6}
-  gizmoCellColor: {r: 0, g: 1, b: 0.5, a: 0.8}
-  isIsometric: 1
-  isoTileSize: {x: 0.5, y: 0.25}
-  isoColumnYOffset: 0
---- !u!4 &726122607
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 726122604}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 964, y: 41, z: 0}
-  m_LocalScale: {x: 160.1857, y: 160.1857, z: 160.1857}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Points:
+    m_Paths:
+    - - {x: 0.47531983, y: 4.9583354}
+      - {x: -4.7745395, y: 2.252754}
+      - {x: 0.13095063, y: -0.17858124}
+      - {x: 0.0677316, y: -0.09838332}
+      - {x: 5.221038, y: 2.528099}
+  m_UseDelaunayMesh: 0
 --- !u!1 &762155991
 GameObject:
   m_ObjectHideFlags: 0
@@ -570,6 +576,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardboardBox
   itemsToSpawn:
+  - {fileID: 6781917921701055244, guid: c30b732ba566ae640bd9f84228496d62, type: 3}
   - {fileID: 8702842730668122307, guid: 499bf53135fad0c41b33546cdb6617fe, type: 3}
   - {fileID: 9178962847618945362, guid: b94c040726ce74e458b7fcc5124ff867, type: 3}
   - {fileID: 1023655028982913118, guid: 57c4d715e3fcb0b4385875d633f77446, type: 3}
@@ -580,7 +587,6 @@ MonoBehaviour:
   - {fileID: 3129286026201303801, guid: ad8dcda577c7e2a47b3666375b7ec2a8, type: 3}
   - {fileID: 3062297458702394359, guid: 6a258677e5a606843b9d85afa9c51b78, type: 3}
   - {fileID: 763305340560282380, guid: 0e4a8677a94e44341be2049b26507a80, type: 3}
-  - {fileID: 6781917921701055244, guid: c30b732ba566ae640bd9f84228496d62, type: 3}
   - {fileID: 1807252767710115046, guid: a918ed08ec4904a4c9b5331f5e60b5eb, type: 3}
   - {fileID: 8351280783212875146, guid: 0cbbf1f899724f14cb7cac39af774dbf, type: 3}
   - {fileID: 4281290694120171711, guid: da393213cc927374b86625aea8ae5fb5, type: 3}
@@ -589,6 +595,11 @@ MonoBehaviour:
   - {fileID: 5876426050568955944, guid: a26c3cefabb56e049b622b82bdf87e7c, type: 3}
   - {fileID: 7484146786524660570, guid: 69ce22d1c6e7f084a9ab1c2a7bd2f751, type: 3}
   - {fileID: 3615020320404947798, guid: d7fee6ddf35dcef46bab204ed2aa0351, type: 3}
+  - {fileID: 5258384969338764817, guid: b52e7cc986260194bbfab1e26ea7da79, type: 3}
+  - {fileID: 7522804351919444506, guid: ff611c04758f4c241ae8e5f902af98b2, type: 3}
+  - {fileID: 3468773755442848274, guid: fb5d2f7d79decf34898376473d1217df, type: 3}
+  - {fileID: 5023120124868767224, guid: 040aca7740da9684f9ab91af2c7c851f, type: 3}
+  - {fileID: 8350957990742370845, guid: 48c40312c2db28441b0a28c14a6398b9, type: 3}
   spawnPoint: {fileID: 0}
   spawnOffset: 5
   loopItems: 0
@@ -708,7 +719,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.45383093, g: 0.35639015, b: 0.8037735, a: 0}
+  m_BackGroundColor: {r: 0.4266643, g: 0.74377364, b: 0.9622642, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0

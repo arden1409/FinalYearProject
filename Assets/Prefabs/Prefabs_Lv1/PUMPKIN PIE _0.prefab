@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5755046814233212304}
   - component: {fileID: 5226692022650284515}
-  - component: {fileID: 8022337842628335628}
-  - component: {fileID: 939965441947038437}
+  - component: {fileID: -2025886399869117860}
+  - component: {fileID: -6295310742491685416}
   m_Layer: 0
   m_Name: PUMPKIN PIE _0
   m_TagString: Untagged
@@ -78,8 +78,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: -2135236901
-  m_SortingLayer: 2
+  m_SortingLayerID: -2071319887
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: -3263606033622253976, guid: ac6a1f5fd6e60c64c90bcc8c179ee264, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -92,7 +92,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8022337842628335628
+--- !u!114 &-2025886399869117860
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -101,27 +101,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 3115642929329682673}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4930ce976e773c94580a30531112376e, type: 3}
+  m_Script: {fileID: 11500000, guid: f532df6ee761a244ba445ba8f8419753, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DraggableItem
-  itemType: any
-  lockOnSnap: 0
+  m_EditorClassIdentifier: Assembly-CSharp::FreeDraggableItem
+  itemType: Default
   dragSortingOrder: 100
-  snapMoveSpeed: 8
-  autoSortByY: 1
+  autoSortByY: 0
   ySortFactor: 100
   dragSortingBoost: 1000
   showHoverOutline: 1
-  hoverOutlineColor: {r: 0, g: 1, b: 0.3, a: 0.8}
-  hoverOutlinePixels: 5
+  hoverOutlineColor: {r: 0, g: 1, b: 0, a: 0.9}
+  hoverOutlinePixels: 2
+  onDragStart:
+    m_PersistentCalls:
+      m_Calls: []
+  onDragEnd:
+    m_PersistentCalls:
+      m_Calls: []
   onPlaced:
     m_PersistentCalls:
       m_Calls: []
-  onReset:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!61 &939965441947038437
-BoxCollider2D:
+  keepDroppedPosition: 1
+  bringToFrontOnClick: 1
+--- !u!60 &-6295310742491685416
+PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -164,5 +167,46 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 4.82, y: 4.220553}
-  m_EdgeRadius: 0
+  m_Points:
+    m_Paths:
+    - - {x: 1.4761072, y: -1.2146482}
+      - {x: 0.88142955, y: -0.5886716}
+      - {x: 1.1944178, y: -0.5573728}
+      - {x: 1.4448085, y: -0.46347633}
+      - {x: 1.6326014, y: -0.40087867}
+      - {x: 1.9455897, y: -0.1817869}
+      - {x: 2.3837733, y: 0.28769553}
+      - {x: 2.4463708, y: 0.44418967}
+      - {x: 2.4463708, y: 1.101465}
+      - {x: 2.415072, y: 1.2266604}
+      - {x: 1.9455897, y: 1.633545}
+      - {x: 1.6326014, y: 1.8526369}
+      - {x: 1.4448085, y: 1.9465333}
+      - {x: 1.1318202, y: 2.0404298}
+      - {x: 0.7562342, y: 2.1343262}
+      - {x: -0.5583165, y: 2.1343262}
+      - {x: -0.652213, y: 2.0717287}
+      - {x: -1.1529943, y: 2.0404298}
+      - {x: -1.4033848, y: 1.9465333}
+      - {x: -1.5911778, y: 1.8526369}
+      - {x: -1.9041661, y: 1.6648439}
+      - {x: -2.311051, y: 1.2266604}
+      - {x: -2.4049473, y: 1.0388674}
+      - {x: -2.4049473, y: 0.44418967}
+      - {x: -2.279752, y: 0.25639668}
+      - {x: -1.9041661, y: -0.15048806}
+      - {x: -1.7163731, y: -0.21308571}
+      - {x: -1.5911778, y: -0.40087867}
+      - {x: -1.0903966, y: -0.5573728}
+      - {x: -0.62091416, y: -0.5573728}
+      - {x: -1.0903966, y: -1.0581541}
+      - {x: -1.2155919, y: -1.1833494}
+      - {x: -1.2155919, y: -1.6841305}
+      - {x: -1.1216954, y: -1.8406247}
+      - {x: -0.99650013, y: -1.9658201}
+      - {x: -0.652213, y: -2.1223142}
+      - {x: 0.9440272, y: -2.1223142}
+      - {x: 1.0379237, y: -2.0910153}
+      - {x: 1.2570155, y: -1.9971188}
+      - {x: 1.5074061, y: -1.7154294}
+  m_UseDelaunayMesh: 0

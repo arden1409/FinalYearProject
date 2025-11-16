@@ -8,11 +8,11 @@ public class CardboardBox : MonoBehaviour, IPointerDownHandler
     public List<GameObject> itemsToSpawn = new List<GameObject>();
     public Transform spawnPoint;
     public float spawnOffset = 0.5f;
-	public bool loopItems = false; // cycle items instead of stopping at the end
-	public float temporaryIgnoreSeconds = 0.15f; // time to ignore raycasts for spawned item
-	[Tooltip("Spiral step radius (world units) to spread spawned items around the box")]
+	public bool loopItems = false;
+	public float temporaryIgnoreSeconds = 0.15f;
+	[Tooltip("Spiral step radius to spread spawned items around the box")]
 	public float spiralStep = 0.3f;
-    [Tooltip("Temporarily move spawned item to IgnoreRaycast layer for smoother multi-spawn")]
+    [Tooltip("Temporarily move spawned item to IgnoreRaycast layer")]
     public bool temporaryIgnoreRaycast = true;
     
     [Header("Visual Feedback")]
@@ -22,8 +22,7 @@ public class CardboardBox : MonoBehaviour, IPointerDownHandler
     
     private SpriteRenderer spriteRenderer;
     private int currentItemIndex = 0;
-    private bool isOpen = false;
-	private int spawnedCount = 0; // number of items spawned since start/reset
+	private int spawnedCount = 0;
     
     void Awake()
     {
@@ -31,9 +30,7 @@ public class CardboardBox : MonoBehaviour, IPointerDownHandler
         if (spawnPoint == null)
             spawnPoint = transform;
 
-		// Clean null entries so count reflects actual items
 		itemsToSpawn.RemoveAll(go => go == null);
-		// Optional: center box color
     }
     
 	public void OnPointerDown(PointerEventData eventData)
@@ -47,7 +44,6 @@ public class CardboardBox : MonoBehaviour, IPointerDownHandler
     {
 		if (itemsToSpawn.Count == 0) return;
 
-		// If reached end
 		if (currentItemIndex >= itemsToSpawn.Count)
         {
 			if (loopItems)
@@ -66,10 +62,10 @@ public class CardboardBox : MonoBehaviour, IPointerDownHandler
         
 		GameObject itemPrefab = itemsToSpawn[currentItemIndex];
 		GameObject newItem = Instantiate(itemPrefab);
-		// Place items around the box in a small spiral so they remain visible
-		int ring = spawnedCount / 6;         // 6 items per ring
-		int slot = spawnedCount % 6;         // slot within ring
-		float angle = slot * Mathf.Deg2Rad * 60f; // 0,60,120,...
+		
+		int ring = spawnedCount / 6;
+		int slot = spawnedCount % 6;
+		float angle = slot * Mathf.Deg2Rad * 60f;
 		float radius = (ring + 1) * spiralStep;
 		Vector3 spiral = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f) * radius;
 		Vector3 spawnPosition = spawnPoint.position + Vector3.up * spawnOffset + spiral;
@@ -81,7 +77,6 @@ public class CardboardBox : MonoBehaviour, IPointerDownHandler
             draggableItem = newItem.AddComponent<DraggableItem>();
         }
 
-		// Prevent spawned item from blocking subsequent clicks on the box
 		if (temporaryIgnoreRaycast && temporaryIgnoreSeconds > 0f)
 		{
 			StartCoroutine(TemporarilyIgnoreRaycast(newItem, temporaryIgnoreSeconds));
@@ -93,7 +88,6 @@ public class CardboardBox : MonoBehaviour, IPointerDownHandler
         currentItemIndex++;
 		spawnedCount++;
         
-		// If reached end and not looping, dim sprite
 		if (!loopItems && currentItemIndex >= itemsToSpawn.Count && spriteRenderer != null)
 		{
 			spriteRenderer.color = Color.gray;
@@ -107,8 +101,7 @@ public class CardboardBox : MonoBehaviour, IPointerDownHandler
 		int ignoreRaycast = LayerMask.NameToLayer("Ignore Raycast");
 		if (ignoreRaycast < 0)
 		{
-			// Fallback to disabling collider if layer is missing
-			var col = go.GetComponent<Collider2D>();
+			Collider2D col = go.GetComponent<Collider2D>();
 			if (col != null)
 			{
 				bool orig = col.enabled;

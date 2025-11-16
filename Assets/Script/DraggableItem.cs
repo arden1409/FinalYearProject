@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
+public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
     [Header("Identification")]
     public string itemType = "Default";
@@ -12,9 +12,9 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public bool lockOnSnap = false;
     public int dragSortingOrder = 100;
     public float snapMoveSpeed = 8f;
-    public bool autoSortByY = true;        // auto order sprites by Y (isometric/top-down)
-    public int ySortFactor = 100;          // higher → more sensitivity to Y
-    public int dragSortingBoost = 1000;    // added while dragging to ensure top-most
+    public bool autoSortByY = false;
+    public int ySortFactor = 100;
+    public int dragSortingBoost = 1000;
 
     [Header("Hover Highlight")]
     public bool showHoverOutline = true;
@@ -26,6 +26,10 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public UnityEvent onPlaced;
     public UnityEvent onReset;
 
+    [Header("Sorting")]
+    [Tooltip("Move this item to the top sorting order when clicked (requires autoSortByY = false).")]
+    public bool bringToFrontOnClick = true;
+
     // Private variables
     private Vector3 originalPosition;
     private Transform originalParent;
@@ -36,8 +40,8 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     private CanvasGroup canvasGroup;
     private int originalSortingOrder;
     private bool isSnapped = false;
-    private Vector3 worldDragOffset; // preserves grab offset in world space
-    private Vector2 uiDragOffset;    // preserves grab offset in UI space
+    private Vector3 worldDragOffset;
+    private Vector2 uiDragOffset;
     private bool isDragging = false;
     private int baseSortingOrder;
     private GameObject outlineRoot;
@@ -50,7 +54,6 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         parentCanvas = GetComponentInParent<Canvas>();
         canvasGroup = GetComponent<CanvasGroup>();
 
-        // Prepare pixel-outline (8-direction offsets) for crisp look
         if (showHoverOutline && spriteRenderer != null)
         {
             outlineRoot = new GameObject("HoverOutlineRoot");
@@ -61,7 +64,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             float ppu = spriteRenderer.sprite != null && spriteRenderer.sprite.pixelsPerUnit > 0
                 ? spriteRenderer.sprite.pixelsPerUnit
                 : 100f;
-            float step = hoverOutlinePixels / ppu; // world units per pixel
+            float step = hoverOutlinePixels / ppu;
 
             Vector2[] dirs = new Vector2[]
             {
@@ -73,10 +76,10 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
             for (int i = 0; i < dirs.Length; i++)
             {
-                var go = new GameObject($"Outline_{i}");
+                GameObject go = new GameObject($"Outline_{i}");
                 go.transform.SetParent(outlineRoot.transform, false);
                 go.transform.localPosition = (Vector3)(dirs[i] * step);
-                var sr = go.AddComponent<SpriteRenderer>();
+                SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
                 sr.sprite = spriteRenderer.sprite;
                 sr.color = hoverOutlineColor;
                 sr.sortingLayerID = spriteRenderer.sortingLayerID;
@@ -96,7 +99,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             spriteRenderer.sortingOrder = baseSortingOrder;
             if (outlineRenderers != null)
             {
-                foreach (var sr in outlineRenderers)
+                foreach (SpriteRenderer sr in outlineRenderers)
                 {
                     if (sr == null) continue;
                     sr.sortingLayerID = spriteRenderer.sortingLayerID;
@@ -108,16 +111,15 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        BringToFrontIfNeeded();
         isSnapped = false;
         originalPosition = transform.position;
         originalParent = transform.parent;
         originalSiblingIndex = transform.GetSiblingIndex();
 
-        // Free current cell when starting to drag
-        var parentCell = transform.parent != null ? transform.parent.GetComponent<GridCell>() : null;
+        GridCell parentCell = transform.parent != null ? transform.parent.GetComponent<GridCell>() : null;
         if (parentCell != null) parentCell.SetOccupied(null);
 
-        // Setup UI blocking for drag
         if (rectTransform != null && canvasGroup == null)
             canvasGroup = gameObject.AddComponent<CanvasGroup>();
 
@@ -126,8 +128,6 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             canvasGroup.blocksRaycasts = false;
             canvasGroup.alpha = 0.9f;
         }
-
-        // Bring sprite to front while dragging
         if (spriteRenderer != null)
         {
             isDragging = true;
@@ -138,7 +138,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
                 spriteRenderer.sortingOrder = baseSortingOrder + dragSortingBoost;
                 if (outlineRenderers != null)
                 {
-                    foreach (var sr in outlineRenderers)
+                    foreach (SpriteRenderer sr in outlineRenderers)
                     {
                         if (sr == null) continue;
                         sr.sortingOrder = spriteRenderer.sortingOrder - 1;
@@ -151,7 +151,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
                 spriteRenderer.sortingOrder = dragSortingOrder;
                 if (outlineRenderers != null)
                 {
-                    foreach (var sr in outlineRenderers)
+                    foreach (SpriteRenderer sr in outlineRenderers)
                     {
                         if (sr == null) continue;
                         sr.sortingOrder = spriteRenderer.sortingOrder - 1;
@@ -160,20 +160,14 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             }
         }
 
-        // Reparent UI elements to canvas for overlay
         if (rectTransform != null && parentCanvas != null && parentCanvas.renderMode != RenderMode.WorldSpace)
         {
             transform.SetParent(parentCanvas.transform, true);
-        }
-
-        // Compute grab offset so the item doesn't snap its center to the cursor
-        if (rectTransform != null && parentCanvas != null && parentCanvas.renderMode != RenderMode.WorldSpace)
-        {
             RectTransform canvasRect = parentCanvas.transform as RectTransform;
             Vector2 localPoint;
             if (RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, eventData.position, parentCanvas.worldCamera, out localPoint))
             {
-                uiDragOffset = (rectTransform != null) ? (rectTransform.anchoredPosition - localPoint) : Vector2.zero;
+                uiDragOffset = rectTransform.anchoredPosition - localPoint;
             }
         }
         else
@@ -195,7 +189,6 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void OnDrag(PointerEventData eventData)
     {
-        // Handle UI elements
         if (rectTransform != null && parentCanvas != null && parentCanvas.renderMode != RenderMode.WorldSpace)
         {
             RectTransform canvasRect = parentCanvas.transform as RectTransform;
@@ -207,7 +200,6 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             return;
         }
 
-        // Handle world space sprites
         Camera cam = eventData.pressEventCamera ?? Camera.main;
         if (cam == null) return;
         
@@ -225,7 +217,6 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             canvasGroup.alpha = 1f;
         }
 
-        // Wait one frame before handling snap logic
         StartCoroutine(EndDragCoroutine());
     }
 
@@ -235,7 +226,6 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
         if (!isSnapped)
         {
-            // Try to find and snap to nearest GridSnapZone
             GridSnapZone snapZone = FindGridSnapZoneAtPosition(transform.position);
             if (snapZone != null)
             {
@@ -245,7 +235,9 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             }
             else
             {
-                ResetPosition();
+                originalPosition = transform.position;
+                originalParent = transform.parent;
+                originalSiblingIndex = transform.GetSiblingIndex();
             }
         }
         else
@@ -253,14 +245,13 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             onPlaced?.Invoke();
         }
 
-        // Restore sorting order
         if (spriteRenderer != null && !isSnapped)
         {
             isDragging = false;
             spriteRenderer.sortingOrder = autoSortByY ? baseSortingOrder : originalSortingOrder;
             if (outlineRenderers != null)
             {
-                foreach (var sr in outlineRenderers)
+                foreach (SpriteRenderer sr in outlineRenderers)
                 {
                     if (sr == null) continue;
                     sr.sortingOrder = spriteRenderer.sortingOrder - 1;
@@ -271,9 +262,9 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     private GridSnapZone FindGridSnapZoneAtPosition(Vector3 position)
     {
-        GridSnapZone[] zones = FindObjectsOfType<GridSnapZone>();
+        GridSnapZone[] zones = FindObjectsByType<GridSnapZone>(FindObjectsSortMode.None);
         
-        foreach (var zone in zones)
+        foreach (GridSnapZone zone in zones)
         {
             Collider2D col = zone.GetComponent<Collider2D>();
             if (col != null && col.bounds.Contains(position))
@@ -322,7 +313,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             spriteRenderer.sortingOrder = autoSortByY ? baseSortingOrder : originalSortingOrder;
             if (outlineRenderers != null)
             {
-                foreach (var sr in outlineRenderers)
+                foreach (SpriteRenderer sr in outlineRenderers)
                 {
                     if (sr == null) continue;
                     sr.sortingOrder = spriteRenderer.sortingOrder - 1;
@@ -339,6 +330,11 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public void OnPointerExit(PointerEventData eventData)
     {
         if (outlineRoot != null) outlineRoot.SetActive(false);
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        BringToFrontIfNeeded();
     }
 
     private IEnumerator SmoothMove(Vector3 targetPos, float duration)
@@ -374,5 +370,31 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             yield return null;
         }
         rectTransform.anchoredPosition = targetAnchoredPos;
+    }
+
+    private void BringToFrontIfNeeded()
+    {
+        if (!bringToFrontOnClick)
+            return;
+
+        if (rectTransform != null && parentCanvas != null && parentCanvas.renderMode != RenderMode.WorldSpace)
+        {
+            transform.SetAsLastSibling();
+        }
+
+        if (spriteRenderer == null || autoSortByY)
+            return;
+
+        int newOrder = DragSortingUtility.GetNextSortingOrder();
+        baseSortingOrder = newOrder;
+        spriteRenderer.sortingOrder = newOrder;
+        originalSortingOrder = newOrder;
+
+        if (outlineRenderers == null) return;
+        foreach (SpriteRenderer sr in outlineRenderers)
+        {
+            if (sr == null) continue;
+            sr.sortingOrder = spriteRenderer.sortingOrder - 1;
+        }
     }
 }
