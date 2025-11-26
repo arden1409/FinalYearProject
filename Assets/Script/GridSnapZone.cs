@@ -18,9 +18,9 @@ public class GridSnapZone : MonoBehaviour, IDropHandler
 
 	[Header("Isometric")]
 	public bool isIsometric = false;
-	[Tooltip("Tile size for isometric grid")]
+	[Tooltip("Tile size in world units or pixels (UI) before rotation/skew for iso look")]
 	public Vector2 isoTileSize = new Vector2(1f, 0.5f);
-	[Tooltip("Y offset per column for staggered look")]
+	[Tooltip("Optional Y offset per column to create staggered look (0 = diamond aligned)")]
 	public float isoColumnYOffset = 0f;
 
 	private GridCell[,] cells;
@@ -32,6 +32,7 @@ public class GridSnapZone : MonoBehaviour, IDropHandler
 
 	public void BuildGrid()
 	{
+		// Clear existing children that might be leftover runtime cells
 		cells = new GridCell[columns, rows];
 		for (int y = 0; y < rows; y++)
 		{
@@ -40,7 +41,7 @@ public class GridSnapZone : MonoBehaviour, IDropHandler
 				GameObject cellObj = new GameObject($"Cell_{x}_{y}");
 				cellObj.transform.SetParent(transform, false);
 				cellObj.transform.localPosition = ComputeCellLocalPosition(x, y);
-				GridCell cell = cellObj.AddComponent<GridCell>();
+				var cell = cellObj.AddComponent<GridCell>();
 				cells[x, y] = cell;
 			}
 		}
@@ -60,6 +61,7 @@ public class GridSnapZone : MonoBehaviour, IDropHandler
 			);
 		}
 
+		// Isometric layout: diamond grid using isoTileSize, optional stagger
 		float w = isoTileSize.x;
 		float h = isoTileSize.y;
 		float isoX = (x - y) * (w * 0.5f);
@@ -69,27 +71,27 @@ public class GridSnapZone : MonoBehaviour, IDropHandler
 
 	public void OnDrop(PointerEventData eventData)
 	{
-		GameObject dragged = eventData.pointerDrag;
+		var dragged = eventData.pointerDrag;
 		if (dragged == null) return;
 
-		DraggableItem item = dragged.GetComponent<DraggableItem>();
-		if (item == null) return;
+		var di = dragged.GetComponent<DraggableItem>();
+		if (di == null) return;
 
-		if (requireExactMatch && item.itemType != acceptType)
+		if (requireExactMatch && di.itemType != acceptType)
 		{
-			item.ResetPosition();
+			di.ResetPosition();
 			return;
 		}
 
-		GridCell targetCell = GetNearestFreeCell(item.transform.position);
+		GridCell targetCell = GetNearestFreeCell(di.transform.position);
 		if (targetCell == null)
 		{
-			item.ResetPosition();
+			di.ResetPosition();
 			return;
 		}
 
-		item.SnapTo(targetCell.transform);
-		targetCell.SetOccupied(item);
+		di.SnapTo(targetCell.transform);
+		targetCell.SetOccupied(di);
 	}
 
 	private GridCell GetNearestFreeCell(Vector3 worldPosition)
@@ -100,12 +102,12 @@ public class GridSnapZone : MonoBehaviour, IDropHandler
 		{
 			for (int x = 0; x < columns; x++)
 			{
-				GridCell cell = cells[x, y];
+				var cell = cells[x, y];
 				if (cell == null || cell.occupied) continue;
-				float dist = Vector3.SqrMagnitude(cell.transform.position - worldPosition);
-				if (dist < bestDist)
+				float d = Vector3.SqrMagnitude(cell.transform.position - worldPosition);
+				if (d < bestDist)
 				{
-					bestDist = dist;
+					bestDist = d;
 					best = cell;
 				}
 			}
@@ -117,35 +119,40 @@ public class GridSnapZone : MonoBehaviour, IDropHandler
 	{
 		if (!drawGizmos) return;
 
+		// Draw in local space so positions match ComputeCellLocalPosition
 		Gizmos.matrix = transform.localToWorldMatrix;
+
 		float width = columns * cellSize.x + (columns - 1) * cellSpacing.x;
 		float height = rows * cellSize.y + (rows - 1) * cellSpacing.y;
 
 		if (!isIsometric)
 		{
+			// Outline of entire grid (rectangular)
 			Gizmos.color = gizmoOutlineColor;
 			Gizmos.DrawWireCube(Vector3.zero, new Vector3(width, height, 0.01f));
 
+			// Individual cells
 			Gizmos.color = gizmoCellColor;
 			Vector3 cellSize3 = new Vector3(cellSize.x, cellSize.y, 0.005f);
 			for (int y = 0; y < rows; y++)
 			{
 				for (int x = 0; x < columns; x++)
 				{
-					Vector3 pos = ComputeCellLocalPosition(x, y);
-					Gizmos.DrawWireCube(pos, cellSize3);
+					Vector3 p = ComputeCellLocalPosition(x, y);
+					Gizmos.DrawWireCube(p, cellSize3);
 				}
 			}
 		}
 		else
 		{
+			// Isometric: draw diamond tiles
 			Gizmos.color = gizmoCellColor;
 			for (int y = 0; y < rows; y++)
 			{
 				for (int x = 0; x < columns; x++)
 				{
-					Vector3 pos = ComputeCellLocalPosition(x, y);
-					DrawIsoDiamondGizmo(pos, isoTileSize);
+					Vector3 p = ComputeCellLocalPosition(x, y);
+					DrawIsoDiamondGizmo(p, isoTileSize);
 				}
 			}
 		}
@@ -153,6 +160,7 @@ public class GridSnapZone : MonoBehaviour, IDropHandler
 
 	private void DrawIsoDiamondGizmo(Vector3 center, Vector2 tile)
 	{
+		// Four points of a diamond (lozenge)
 		Vector3 right = new Vector3(tile.x * 0.5f, 0f, 0f);
 		Vector3 left = -right;
 		Vector3 up = new Vector3(0f, tile.y * 0.5f, 0f);

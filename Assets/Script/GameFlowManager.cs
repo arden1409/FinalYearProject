@@ -1,0 +1,307 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+[DefaultExecutionOrder(-1000)]
+public class GameFlowManager : MonoBehaviour
+{
+    public static GameFlowManager Instance { get; private set; }
+
+    public enum GameState
+    {
+        Boot,
+        MainMenu,
+        LevelSelect,
+        StoryIntro,
+        Gameplay,
+        StoryOutro
+    }
+
+    [Serializable]
+    public class LevelDefinition
+    {
+        public string levelId = "Level_1";
+        public string levelScene = "Assets/Scenes/Level/Level1.unity";
+        [Tooltip("Optional story sequence id to play before the level")]
+        public string storyIntroId = "";
+        [Tooltip("Optional story sequence id to play after the level")]
+        public string storyOutroId = "";
+        public bool unlockedByDefault = false;
+    }
+
+    [Serializable]
+    public class LevelProgress
+    {
+        public string levelId;
+        public bool unlocked;
+        public bool completed;
+        public int bestScore;
+
+        public LevelProgress(string id, bool unlockedByDefault)
+        {
+            levelId = id;
+            unlocked = unlockedByDefault;
+            completed = false;
+            bestScore = 0;
+        }
+    }
+
+    [Header("Scene Names")]
+    public string mainMenuScene = "Assets/Scenes/MainMenu.unity";
+    public string levelSelectScene = "Assets/Scenes/LevelSelect.unity";
+    public string storyScene = "Assets/Scenes/StoryScreen.unity";
+
+    [Header("Level List")]
+    public List<LevelDefinition> levels = new List<LevelDefinition>();
+
+    public Action<GameState> onStateChanged;
+    public Action<LevelProgress> onProgressUpdated;
+
+    public GameState CurrentState { get; private set; } = GameState.Boot;
+    public LevelDefinition CurrentLevel { get; private set; }
+    public LevelProgress CurrentLevelProgress { get; private set; }
+
+    private readonly Dictionary<string, LevelProgress> progressLookup = new Dictionary<string, LevelProgress>();
+    private const string ProgressKeyPrefix = "LEVEL_PROGRESS_";
+    private const string LastLevelKey = "LAST_LEVEL";
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        BootstrapProgress();
+    }
+
+    private void BootstrapProgress()
+    {
+        progressLookup.Clear();
+        foreach (var level in levels)
+        {
+            if (string.IsNullOrEmpty(level.levelId))
+                continue;
+
+            LevelProgress data = LoadLevelProgress(level);
+            progressLookup[level.levelId] = data;
+        }
+    }
+
+    private LevelProgress LoadLevelProgress(LevelDefinition level)
+    {
+        string key = ProgressKeyPrefix + level.levelId;
+        if (!PlayerPrefs.HasKey(key))
+        {
+            return new LevelProgress(level.levelId, level.unlockedByDefault);
+        }
+
+        string json = PlayerPrefs.GetString(key);
+        LevelProgress progress = JsonUtility.FromJson<LevelProgress>(json);
+        if (progress == null)
+        {
+            progress = new LevelProgress(level.levelId, level.unlockedByDefault);
+        }
+        return progress;
+    }
+
+    private void SaveLevelProgress(LevelProgress progress)
+    {
+        string json = JsonUtility.ToJson(progress);
+        PlayerPrefs.SetString(ProgressKeyPrefix + progress.levelId, json);
+        PlayerPrefs.Save();
+        onProgressUpdated?.Invoke(progress);
+    }
+
+    public void ResetAllProgress()
+    {
+        foreach (var kvp in progressLookup)
+        {
+            kvp.Value.completed = false;
+            kvp.Value.bestScore = 0;
+            kvp.Value.unlocked = GetLevelDefinition(kvp.Key)?.unlockedByDefault ?? false;
+            SaveLevelProgress(kvp.Value);
+        }
+        PlayerPrefs.DeleteKey(LastLevelKey);
+    }
+
+    public void LoadMainMenu()
+    {
+        CurrentLevel = null;
+        CurrentLevelProgress = null;
+        TransitionState(GameState.MainMenu);
+        LoadSceneAsync(mainMenuScene);
+    }
+
+    public void LoadLevelSelect()
+    {
+        CurrentLevel = null;
+        CurrentLevelProgress = null;
+        TransitionState(GameState.LevelSelect);
+        LoadSceneAsync(levelSelectScene);
+    }
+
+    public void StartNewGame()
+    {
+        ResetAllProgress();
+        LevelDefinition firstLevel = levels.Count > 0 ? levels[0] : null;
+        if (firstLevel == null)
+        {
+            Debug.LogWarning("[GameFlowManager] No levels configured.");
+            return;
+        }
+
+        StartLevel(firstLevel.levelId, playStoryIntro: true);
+    }
+
+    public void ContinueGame()
+    {
+        string lastLevelId = PlayerPrefs.GetString(LastLevelKey, string.Empty);
+        if (string.IsNullOrEmpty(lastLevelId))
+        {
+            LoadLevelSelect();
+            return;
+        }
+
+        StartLevel(lastLevelId, playStoryIntro: false);
+    }
+
+    public void StartLevel(string levelId, bool playStoryIntro = true)
+    {
+        LevelDefinition definition = GetLevelDefinition(levelId);
+        if (definition == null)
+        {
+            Debug.LogError($"[GameFlowManager] Level id {levelId} not found.");
+            return;
+        }
+
+        if (!progressLookup.TryGetValue(levelId, out LevelProgress progress) || !progress.unlocked)
+        {
+            Debug.LogWarning($"[GameFlowManager] Level {levelId} is locked.");
+            return;
+        }
+
+        CurrentLevel = definition;
+        CurrentLevelProgress = progress;
+        PlayerPrefs.SetString(LastLevelKey, levelId);
+
+        if (playStoryIntro && !string.IsNullOrEmpty(definition.storyIntroId))
+        {
+            TransitionState(GameState.StoryIntro);
+            LoadSceneAsync(storyScene);
+        }
+        else
+        {
+            TransitionState(GameState.Gameplay);
+            LoadSceneAsync(definition.levelScene);
+        }
+    }
+
+    public void NotifyStoryIntroFinished()
+    {
+        if (CurrentLevel == null)
+        {
+            Debug.LogWarning("[GameFlowManager] No active level for story intro.");
+            return;
+        }
+
+        TransitionState(GameState.Gameplay);
+        LoadSceneAsync(CurrentLevel.levelScene);
+    }
+
+    public void CompleteLevel(int score)
+    {
+        if (CurrentLevelProgress == null || CurrentLevel == null)
+        {
+            Debug.LogWarning("[GameFlowManager] CompleteLevel called without active level.");
+            return;
+        }
+
+        CurrentLevelProgress.completed = true;
+        CurrentLevelProgress.bestScore = Mathf.Max(CurrentLevelProgress.bestScore, score);
+        SaveLevelProgress(CurrentLevelProgress);
+
+        UnlockNextLevel(CurrentLevel.levelId);
+
+        if (!string.IsNullOrEmpty(CurrentLevel.storyOutroId))
+        {
+            TransitionState(GameState.StoryOutro);
+            LoadSceneAsync(storyScene);
+        }
+        else
+        {
+            LoadLevelSelect();
+        }
+    }
+
+    public void NotifyStoryOutroFinished()
+    {
+        LoadLevelSelect();
+    }
+
+    private void UnlockNextLevel(string completedLevelId)
+    {
+        int idx = levels.FindIndex(l => l.levelId == completedLevelId);
+        if (idx < 0 || idx + 1 >= levels.Count)
+            return;
+
+        LevelDefinition next = levels[idx + 1];
+        if (progressLookup.TryGetValue(next.levelId, out LevelProgress progress))
+        {
+            if (!progress.unlocked)
+            {
+                progress.unlocked = true;
+                SaveLevelProgress(progress);
+            }
+        }
+    }
+
+    private void LoadSceneAsync(string scenePathOrName)
+    {
+        if (string.IsNullOrEmpty(scenePathOrName))
+        {
+            Debug.LogWarning("[GameFlowManager] Attempted to load empty scene name.");
+            return;
+        }
+
+        string sceneName = scenePathOrName.EndsWith(".unity", StringComparison.OrdinalIgnoreCase)
+            ? Path.GetFileNameWithoutExtension(scenePathOrName)
+            : scenePathOrName;
+
+        SceneManager.LoadScene(sceneName);
+    }
+
+    public LevelDefinition GetLevelDefinition(string levelId)
+    {
+        if (string.IsNullOrEmpty(levelId))
+            return null;
+
+        return levels.Find(l => l.levelId == levelId);
+    }
+
+    public LevelProgress GetProgress(string levelId)
+    {
+        if (string.IsNullOrEmpty(levelId))
+            return null;
+
+        progressLookup.TryGetValue(levelId, out var progress);
+        return progress;
+    }
+
+    private void TransitionState(GameState newState)
+    {
+        if (CurrentState == newState)
+            return;
+
+        CurrentState = newState;
+        onStateChanged?.Invoke(newState);
+        Debug.Log($"[GameFlowManager] State changed to {newState}");
+    }
+}
+

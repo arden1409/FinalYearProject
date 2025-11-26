@@ -202,7 +202,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
         Camera cam = eventData.pressEventCamera ?? Camera.main;
         if (cam == null) return;
-        
+
         float z = cam.WorldToScreenPoint(transform.position).z;
         Vector3 screenPoint = new Vector3(eventData.position.x, eventData.position.y, z);
         Vector3 worldPos = cam.ScreenToWorldPoint(screenPoint);
@@ -263,7 +263,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     private GridSnapZone FindGridSnapZoneAtPosition(Vector3 position)
     {
         GridSnapZone[] zones = FindObjectsByType<GridSnapZone>(FindObjectsSortMode.None);
-        
+
         foreach (GridSnapZone zone in zones)
         {
             Collider2D col = zone.GetComponent<Collider2D>();

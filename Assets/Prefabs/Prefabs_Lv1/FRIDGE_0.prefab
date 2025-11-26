@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3136543383022207584}
   - component: {fileID: 7580377866955859568}
   - component: {fileID: -3361874031997848918}
-  - component: {fileID: -2345526986159928811}
+  - component: {fileID: 6015808622163573090}
   m_Layer: 0
   m_Name: FRIDGE_0
   m_TagString: Untagged
@@ -178,7 +178,7 @@ PolygonCollider2D:
       - {x: 1.2001067, y: -4.91689}
       - {x: 1.2627044, y: -4.8855915}
   m_UseDelaunayMesh: 0
---- !u!114 &-2345526986159928811
+--- !u!114 &6015808622163573090
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -187,25 +187,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 8351280783212875146}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f532df6ee761a244ba445ba8f8419753, type: 3}
+  m_Script: {fileID: 11500000, guid: 4930ce976e773c94580a30531112376e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FreeDraggableItem
-  itemType: Default
+  m_EditorClassIdentifier: Assembly-CSharp::DraggableItem
+  itemType: any
+  lockOnSnap: 0
   dragSortingOrder: 100
+  snapMoveSpeed: 8
   autoSortByY: 0
   ySortFactor: 100
   dragSortingBoost: 1000
   showHoverOutline: 1
   hoverOutlineColor: {r: 0, g: 1, b: 0, a: 0.9}
   hoverOutlinePixels: 2
-  onDragStart:
-    m_PersistentCalls:
-      m_Calls: []
-  onDragEnd:
-    m_PersistentCalls:
-      m_Calls: []
   onPlaced:
     m_PersistentCalls:
       m_Calls: []
-  keepDroppedPosition: 1
+  onReset:
+    m_PersistentCalls:
+      m_Calls: []
   bringToFrontOnClick: 1

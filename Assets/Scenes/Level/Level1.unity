@@ -329,8 +329,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ada9f296690171c4f856084510d614c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GridSnapZone
-  columns: 21
-  rows: 19
+  columns: 27
+  rows: 25
   cellSize: {x: 0.2, y: 0.2}
   cellSpacing: {x: 0, y: 0}
   acceptType: any
@@ -349,13 +349,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 726122604}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0.0024605393, w: 0.99999696}
   m_LocalPosition: {x: 962.6, y: 41, z: 0}
-  m_LocalScale: {x: 162.3, y: 159.8, z: 160.1857}
+  m_LocalScale: {x: 120.03112, y: 120.757034, z: 118.46745}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -0.282}
 --- !u!60 &726122608
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -402,11 +402,12 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0.22773671, y: 4.7649074}
-      - {x: -4.7745395, y: 2.252754}
+    - - {x: 3.1833003, y: 5.0592933}
+      - {x: 0.4605086, y: 6.505599}
+      - {x: -6.367509, y: 3.024762}
       - {x: 0.13095063, y: -0.17858124}
       - {x: 0.0677316, y: -0.09838332}
-      - {x: 4.973456, y: 2.3926988}
+      - {x: 6.8600373, y: 3.261707}
   m_UseDelaunayMesh: 0
 --- !u!1 &762155991
 GameObject:
@@ -591,6 +592,8 @@ MonoBehaviour:
   - {fileID: 790605417299307907, guid: 37956c7fde30aa74585611403e05cc70, type: 3}
   - {fileID: 790605417299307907, guid: 37956c7fde30aa74585611403e05cc70, type: 3}
   - {fileID: 7376015800535272144, guid: 7ae7e0860f108b2489069fdb8dd6f859, type: 3}
+  - {fileID: 7376015800535272144, guid: 7ae7e0860f108b2489069fdb8dd6f859, type: 3}
+  - {fileID: 7376015800535272144, guid: 7ae7e0860f108b2489069fdb8dd6f859, type: 3}
   - {fileID: 3129286026201303801, guid: ad8dcda577c7e2a47b3666375b7ec2a8, type: 3}
   - {fileID: 3062297458702394359, guid: 6a258677e5a606843b9d85afa9c51b78, type: 3}
   - {fileID: 763305340560282380, guid: 0e4a8677a94e44341be2049b26507a80, type: 3}
@@ -723,7 +726,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.45383093, g: 0.35639015, b: 0.8037735, a: 0}
+  m_BackGroundColor: {r: 0.21176472, g: 0.27058825, b: 0.30980393, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
