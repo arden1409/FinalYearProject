@@ -12,6 +12,7 @@ public class GameFlowManager : MonoBehaviour
     public enum GameState
     {
         Boot,
+        CharacterIntro,
         MainMenu,
         LevelSelect,
         StoryIntro,
@@ -49,6 +50,7 @@ public class GameFlowManager : MonoBehaviour
     }
 
     [Header("Scene Names")]
+    public string characterIntroScene = "Assets/Scenes/CharacterIntro.unity";
     public string mainMenuScene = "Assets/Scenes/MainMenu.unity";
     public string levelSelectScene = "Assets/Scenes/LevelSelect.unity";
     public string storyScene = "Assets/Scenes/StoryScreen.unity";
@@ -67,6 +69,8 @@ public class GameFlowManager : MonoBehaviour
     private const string ProgressKeyPrefix = "LEVEL_PROGRESS_";
     private const string LastLevelKey = "LAST_LEVEL";
 
+    private const string HasSeenCharacterIntroKey = "HAS_SEEN_CHARACTER_INTRO";
+    
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -79,6 +83,40 @@ public class GameFlowManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         BootstrapProgress();
+    }
+    
+    private void Start()
+    {
+        // Chỉ load character intro khi game khởi động lần đầu (Boot state)
+        if (CurrentState == GameState.Boot)
+        {
+            // Kiểm tra xem đã xem character intro chưa (có thể bỏ qua nếu muốn luôn hiển thị)
+            bool hasSeenIntro = PlayerPrefs.GetInt(HasSeenCharacterIntroKey, 0) == 1;
+            
+            if (!hasSeenIntro && !string.IsNullOrEmpty(characterIntroScene))
+            {
+                LoadCharacterIntro();
+            }
+            else
+            {
+                LoadMainMenu();
+            }
+        }
+    }
+    
+    private void LoadCharacterIntro()
+    {
+        TransitionState(GameState.CharacterIntro);
+        LoadSceneAsync(characterIntroScene);
+    }
+    
+    public void NotifyCharacterIntroFinished()
+    {
+        // Đánh dấu đã xem character intro
+        PlayerPrefs.SetInt(HasSeenCharacterIntroKey, 1);
+        PlayerPrefs.Save();
+        
+        LoadMainMenu();
     }
 
     private void BootstrapProgress()
@@ -144,6 +182,7 @@ public class GameFlowManager : MonoBehaviour
             SaveLevelProgress(kvp.Value);
         }
         PlayerPrefs.DeleteKey(LastLevelKey);
+        PlayerPrefs.DeleteKey(HasSeenCharacterIntroKey);
     }
 
     public void LoadMainMenu()
@@ -313,6 +352,8 @@ public class GameFlowManager : MonoBehaviour
 
     public void NotifyStoryOutroFinished()
     {
+        // Sau khi story outro kết thúc, có thể chuyển sang level tiếp theo hoặc về level select
+        // Hiện tại mặc định về level select, có thể sửa để tự động chuyển level tiếp theo nếu muốn
         LoadLevelSelect();
     }
 
