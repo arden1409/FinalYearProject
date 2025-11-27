@@ -133,6 +133,12 @@ public class FreeDraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler,
         originalParent = transform.parent;
         originalSiblingIndex = transform.GetSiblingIndex();
 
+        // Ghi lại trạng thái trước khi di chuyển cho undo/redo
+        if (UndoRedoManager.Instance != null)
+        {
+            UndoRedoManager.Instance.RecordActionBefore(this);
+        }
+
         if (rectTransform != null && parentCanvas != null)
         {
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
@@ -249,6 +255,12 @@ public class FreeDraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
         onDragEnd?.Invoke();
         onPlaced?.Invoke();
+
+        // Ghi lại trạng thái sau khi thả cho undo/redo
+        if (UndoRedoManager.Instance != null)
+        {
+            UndoRedoManager.Instance.RecordActionAfter(this);
+        }
     }
 
     private IEnumerator MonitorPosition(Vector3 expectedPosition)

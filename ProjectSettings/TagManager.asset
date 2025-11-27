@@ -13,7 +13,7 @@ TagManager:
   - UI
   - Items
   - Small_items
-  - 
+  - Menu
   - 
   - 
   - 
@@ -49,6 +49,9 @@ TagManager:
     locked: 0
   - name: Small_items
     uniqueID: 2223647409
+    locked: 0
+  - name: Menu
+    uniqueID: 4059304025
     locked: 0
   m_RenderingLayers:
   - Default

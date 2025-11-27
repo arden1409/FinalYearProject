@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -203,6 +204,24 @@ public class GridSnapZone : MonoBehaviour, IDropHandler
 	public int GetTotalCells()
 	{
 		return columns * rows;
+	}
+
+	public GridCell[] GetAllCells()
+	{
+		if (cells == null) return new GridCell[0];
+		
+		List<GridCell> allCells = new List<GridCell>();
+		for (int y = 0; y < rows; y++)
+		{
+			for (int x = 0; x < columns; x++)
+			{
+				if (cells[x, y] != null)
+				{
+					allCells.Add(cells[x, y]);
+				}
+			}
+		}
+		return allCells.ToArray();
 	}
 }
 

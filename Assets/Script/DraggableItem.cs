@@ -120,6 +120,12 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         GridCell parentCell = transform.parent != null ? transform.parent.GetComponent<GridCell>() : null;
         if (parentCell != null) parentCell.SetOccupied(null);
 
+        // Ghi lại trạng thái trước khi di chuyển cho undo/redo
+        if (UndoRedoManager.Instance != null)
+        {
+            UndoRedoManager.Instance.RecordActionBefore(this);
+        }
+
         if (rectTransform != null && canvasGroup == null)
             canvasGroup = gameObject.AddComponent<CanvasGroup>();
 
@@ -319,6 +325,12 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
                     sr.sortingOrder = spriteRenderer.sortingOrder - 1;
                 }
             }
+        }
+
+        // Ghi lại trạng thái sau khi snap cho undo/redo
+        if (UndoRedoManager.Instance != null)
+        {
+            UndoRedoManager.Instance.RecordActionAfter(this);
         }
     }
 
