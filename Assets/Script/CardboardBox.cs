@@ -14,6 +14,7 @@ public class CardboardBox : MonoBehaviour, IPointerDownHandler
 	public float spiralStep = 0.3f;
     [Tooltip("Temporarily move spawned item to IgnoreRaycast layer")]
     public bool temporaryIgnoreRaycast = true;
+    [SerializeField] private LevelManager levelManager;
     
     [Header("Visual Feedback")]
     public GameObject highlightEffect;
@@ -29,6 +30,11 @@ public class CardboardBox : MonoBehaviour, IPointerDownHandler
         spriteRenderer = GetComponent<SpriteRenderer>();
         if (spawnPoint == null)
             spawnPoint = transform;
+
+        if (levelManager == null)
+        {
+            levelManager = FindFirstObjectByType<LevelManager>();
+        }
 
 		itemsToSpawn.RemoveAll(go => go == null);
     }
@@ -71,19 +77,26 @@ public class CardboardBox : MonoBehaviour, IPointerDownHandler
 		Vector3 spawnPosition = spawnPoint.position + Vector3.up * spawnOffset + spiral;
         newItem.transform.position = spawnPosition;
         
-        DraggableItem draggableItem = newItem.GetComponent<DraggableItem>();
-        if (draggableItem == null)
-        {
-            draggableItem = newItem.AddComponent<DraggableItem>();
-        }
+		DraggableItem draggableItem = newItem.GetComponent<DraggableItem>();
 
 		if (temporaryIgnoreRaycast && temporaryIgnoreSeconds > 0f)
 		{
 			StartCoroutine(TemporarilyIgnoreRaycast(newItem, temporaryIgnoreSeconds));
 		}
         
-        draggableItem.snapMoveSpeed = 8f;
-        draggableItem.lockOnSnap = true;
+        if (draggableItem != null)
+        {
+        if (draggableItem != null)
+        {
+            draggableItem.snapMoveSpeed = 8f;
+            draggableItem.lockOnSnap = true;
+        }
+
+        if (levelManager != null)
+        {
+            levelManager.RegisterSpawnedObject(newItem);
+        }
+        }
         
         currentItemIndex++;
 		spawnedCount++;

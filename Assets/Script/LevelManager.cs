@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
@@ -9,27 +10,46 @@ public class LevelManager : MonoBehaviour
     public List<GridSnapZone> dropZones = new List<GridSnapZone>();
     
     [Header("UI References")]
+#if UNITY_TMPRO
+    public TMPro.TextMeshProUGUI itemsRemainingTMPText;
+#else
     public Text itemsRemainingText;
-    public Text scoreText;
+#endif
+#if UNITY_TMPRO
+    public TMPro.TextMeshProUGUI timerTMPText;
+#endif
     public GameObject levelCompletePanel;
     public Button nextLevelButton;
     public Button restartButton;
+    public Button doneButton;
+    public Image[] starIcons;
+    public Sprite filledStarSprite;
+    public Sprite emptyStarSprite;
     
     [Header("Level Settings")]
     public int totalItems = 0;
-    public int itemsPlacedCorrectly = 0;
-    public int score = 0;
-    public int pointsPerCorrectPlacement = 10;
     
-    private List<DraggableItem> allItems = new List<DraggableItem>();
+    private readonly List<GameObject> spawnedObjects = new List<GameObject>();
     private bool levelCompleted = false;
+    private bool timerRunning = false;
+    private float levelStartTime = 0f;
+    private bool readyToComplete = false;
+    private int starsEarned = 0;
     
     void Start()
     {
         // Đếm tổng số items từ cardboard box
         if (cardboardBox != null)
         {
-            totalItems = cardboardBox.itemsToSpawn.Count;
+            totalItems = 0;
+            foreach (var prefab in cardboardBox.itemsToSpawn)
+            {
+                if (prefab == null) continue;
+                if (prefab.GetComponent<DraggableItem>() != null)
+                {
+                    totalItems++;
+                }
+            }
         }
         
         // Setup UI
@@ -41,12 +61,23 @@ public class LevelManager : MonoBehaviour
             
         if (nextLevelButton != null)
             nextLevelButton.onClick.AddListener(LoadNextLevel);
+
+        if (doneButton != null)
+        {
+            doneButton.gameObject.SetActive(false);
+            doneButton.onClick.AddListener(OnDoneButtonClicked);
+        }
+
+        timerRunning = true;
+        levelStartTime = Time.time;
+        UpdateStarUI(0);
     }
     
     void Update()
     {
         // Cập nhật UI mỗi frame
         UpdateUI();
+        UpdateTimer();
         
         // Kiểm tra điều kiện hoàn thành level
         CheckLevelCompletion();
@@ -54,16 +85,40 @@ public class LevelManager : MonoBehaviour
     
     private void UpdateUI()
     {
+#if UNITY_TMPRO
+        if (itemsRemainingTMPText != null && cardboardBox != null)
+        {
+            int remaining = cardboardBox.GetRemainingItemsCount();
+            itemsRemainingTMPText.text = $"Items Remaining: {remaining}";
+        }
+#else
         if (itemsRemainingText != null && cardboardBox != null)
         {
             int remaining = cardboardBox.GetRemainingItemsCount();
             itemsRemainingText.text = $"Items Remaining: {remaining}";
         }
-        
-        if (scoreText != null)
+#endif
+
+        if (doneButton != null)
         {
-            scoreText.text = $"Score: {score}";
+            doneButton.interactable = readyToComplete;
         }
+    }
+
+    private void UpdateTimer()
+    {
+        if (!timerRunning) return;
+        float elapsed = Time.time - levelStartTime;
+        int minutes = Mathf.FloorToInt(elapsed / 60f);
+        int seconds = Mathf.FloorToInt(elapsed % 60f);
+        string textValue = $"{minutes:00}:{seconds:00}";
+
+#if UNITY_TMPRO
+        if (timerTMPText != null)
+        {
+            timerTMPText.text = textValue;
+        }
+#endif
     }
     
     private void CheckLevelCompletion()
@@ -76,7 +131,14 @@ public class LevelManager : MonoBehaviour
             
             if (correctPlacements >= totalItems)
             {
-                CompleteLevel();
+                if (!readyToComplete)
+                {
+                    readyToComplete = true;
+                    if (doneButton != null)
+                    {
+                        doneButton.gameObject.SetActive(true);
+                    }
+                }
             }
         }
     }
@@ -106,14 +168,52 @@ public class LevelManager : MonoBehaviour
     private void CompleteLevel()
     {
         levelCompleted = true;
-        score = itemsPlacedCorrectly * pointsPerCorrectPlacement;
-        
+        timerRunning = false;
+        float elapsed = Time.time - levelStartTime;
+        starsEarned = CalculateStarRating(elapsed);
+        UpdateStarUI(starsEarned);
+
         if (levelCompletePanel != null)
         {
             levelCompletePanel.SetActive(true);
         }
+
+        if (doneButton != null)
+        {
+            doneButton.gameObject.SetActive(false);
+        }
+
+        GameFlowManager.Instance?.CompleteLevel(starsEarned, autoTransition: false);
         
-        Debug.Log("Level Completed! Score: " + score);
+        Debug.Log("Level Completed! Stars: " + starsEarned);
+    }
+
+    private int CalculateStarRating(float elapsedSeconds)
+    {
+        if (elapsedSeconds < 180f) return 3;
+        if (elapsedSeconds < 300f) return 2;
+        return 1;
+    }
+
+    private void UpdateStarUI(int stars)
+    {
+        if (starIcons == null || starIcons.Length == 0) return;
+        for (int i = 0; i < starIcons.Length; i++)
+        {
+            if (starIcons[i] == null) continue;
+            Sprite targetSprite = (stars > i) ? filledStarSprite : emptyStarSprite;
+            if (targetSprite != null)
+            {
+                starIcons[i].sprite = targetSprite;
+            }
+            starIcons[i].enabled = targetSprite != null;
+        }
+    }
+
+    private void OnDoneButtonClicked()
+    {
+        if (!readyToComplete || levelCompleted) return;
+        CompleteLevel();
     }
     
     public void RestartLevel()
@@ -123,40 +223,66 @@ public class LevelManager : MonoBehaviour
             cardboardBox.ResetBox();
         }
         
-        foreach (var item in allItems)
+        foreach (var obj in spawnedObjects)
         {
-            if (item != null)
+            if (obj != null)
             {
-                item.ResetPosition();
+                Destroy(obj);
             }
         }
+        spawnedObjects.Clear();
         
-        itemsPlacedCorrectly = 0;
-        score = 0;
         levelCompleted = false;
+        readyToComplete = false;
+        timerRunning = true;
+        levelStartTime = Time.time;
+        starsEarned = 0;
         
         if (levelCompletePanel != null)
         {
             levelCompletePanel.SetActive(false);
         }
+
+        if (doneButton != null)
+        {
+            doneButton.gameObject.SetActive(false);
+        }
+
+        UpdateStarUI(0);
     }
     
     public void LoadNextLevel()
     {
-        Debug.Log("Loading next level...");
+        if (GameFlowManager.Instance != null)
+        {
+            GameFlowManager.Instance.LoadNextLevelImmediate();
+        }
+        else
+        {
+            Scene currentScene = SceneManager.GetActiveScene();
+            int nextIndex = currentScene.buildIndex + 1;
+            if (nextIndex < SceneManager.sceneCountInBuildSettings)
+            {
+                SceneManager.LoadScene(nextIndex);
+            }
+            else
+            {
+                Debug.LogWarning("No additional levels configured in Build Settings.");
+            }
+        }
     }
     
     public void RegisterItem(DraggableItem item)
     {
-        if (!allItems.Contains(item))
-        {
-            allItems.Add(item);
-        }
+        RegisterSpawnedObject(item != null ? item.gameObject : null);
     }
-    
-    public void OnItemPlacedCorrectly()
+
+    public void RegisterSpawnedObject(GameObject obj)
     {
-        itemsPlacedCorrectly++;
-        score += pointsPerCorrectPlacement;
+        if (obj == null) return;
+        if (!spawnedObjects.Contains(obj))
+        {
+            spawnedObjects.Add(obj);
+        }
     }
 }

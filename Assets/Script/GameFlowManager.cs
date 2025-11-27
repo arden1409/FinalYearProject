@@ -215,7 +215,7 @@ public class GameFlowManager : MonoBehaviour
         LoadSceneAsync(CurrentLevel.levelScene);
     }
 
-    public void CompleteLevel(int score)
+    public void CompleteLevel(int score, bool autoTransition = true)
     {
         if (CurrentLevelProgress == null || CurrentLevel == null)
         {
@@ -229,6 +229,11 @@ public class GameFlowManager : MonoBehaviour
 
         UnlockNextLevel(CurrentLevel.levelId);
 
+        if (!autoTransition)
+        {
+            return;
+        }
+
         if (!string.IsNullOrEmpty(CurrentLevel.storyOutroId))
         {
             TransitionState(GameState.StoryOutro);
@@ -238,6 +243,40 @@ public class GameFlowManager : MonoBehaviour
         {
             LoadLevelSelect();
         }
+    }
+
+    public void LoadNextLevelImmediate()
+    {
+        if (levels == null || levels.Count == 0)
+        {
+            Debug.LogWarning("[GameFlowManager] No levels configured.");
+            return;
+        }
+
+        if (CurrentLevel == null)
+        {
+            Debug.LogWarning("[GameFlowManager] No current level to advance from. Returning to level select.");
+            LoadLevelSelect();
+            return;
+        }
+
+        int currentIndex = levels.FindIndex(l => l.levelId == CurrentLevel.levelId);
+        if (currentIndex < 0 || currentIndex + 1 >= levels.Count)
+        {
+            Debug.Log("[GameFlowManager] Completed the last available level. Returning to level select.");
+            LoadLevelSelect();
+            return;
+        }
+
+        LevelDefinition next = levels[currentIndex + 1];
+        if (!progressLookup.TryGetValue(next.levelId, out var nextProgress) || !nextProgress.unlocked)
+        {
+            Debug.LogWarning($"[GameFlowManager] Next level {next.levelId} is locked. Returning to level select.");
+            LoadLevelSelect();
+            return;
+        }
+
+        StartLevel(next.levelId, playStoryIntro: false);
     }
 
     public void NotifyStoryOutroFinished()

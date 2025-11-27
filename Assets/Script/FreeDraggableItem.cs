@@ -48,6 +48,7 @@ public class FreeDraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler,
     private int baseSortingOrder;
     private GameObject outlineRoot;
     private SpriteRenderer[] outlineRenderers;
+    [SerializeField] private LevelManager levelManager;
 
     void Awake()
     {
@@ -61,6 +62,12 @@ public class FreeDraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler,
         spriteRenderer = GetComponent<SpriteRenderer>();
         parentCanvas = GetComponentInParent<Canvas>();
         canvasGroup = GetComponent<CanvasGroup>();
+
+        if (levelManager == null)
+        {
+            levelManager = FindFirstObjectByType<LevelManager>();
+        }
+        levelManager?.RegisterSpawnedObject(gameObject);
 
         if (showHoverOutline && spriteRenderer != null)
         {

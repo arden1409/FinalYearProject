@@ -31,6 +31,14 @@ public class MainMenuUI : MonoBehaviour
         }
     }
 
+    public void OnCloseSettings()
+    {
+        if (settingsPanel != null && settingsPanel.activeSelf)
+        {
+            settingsPanel.SetActive(false);
+        }
+    }
+
     public void OnQuitGame()
     {
 #if UNITY_EDITOR
