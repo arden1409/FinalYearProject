@@ -2644,6 +2644,7 @@ GameObject:
   - component: {fileID: 944609290}
   - component: {fileID: 944609292}
   - component: {fileID: 944609291}
+  - component: {fileID: 944609293}
   m_Layer: 0
   m_Name: SettingsPanel
   m_TagString: Untagged
@@ -2712,6 +2713,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 944609289}
   m_CullTransparentMesh: 1
+--- !u!114 &944609293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 944609289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00c1edd7df2ccc241861e8cbd4cfc175, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SettingsPanelHelper
+  autoFindOnStart: 1
+  musicToggle: {fileID: 474054182}
+  soundToggle: {fileID: 1602674442}
+  musicToggleName: MusicToggle
+  soundToggleName: SoundToggle
 --- !u!1 &947139121
 GameObject:
   m_ObjectHideFlags: 0
@@ -6275,59 +6293,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2046304016}
   m_CullTransparentMesh: 1
---- !u!1 &2141424979
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2141424981}
-  - component: {fileID: 2141424980}
-  m_Layer: 0
-  m_Name: SettingManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &2141424980
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2141424979}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba5b2f7d39982794ba648b9e13378269, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SettingsManager
-  audioMixer: {fileID: 0}
-  musicVolumeParameter: MusicVolume
-  soundVolumeParameter: SoundVolume
-  musicAudioSource: {fileID: 0}
-  soundAudioSource: {fileID: 0}
-  musicToggle: {fileID: 474054182}
-  soundToggle: {fileID: 1602674442}
-  musicOnByDefault: 1
-  soundOnByDefault: 1
---- !u!4 &2141424981
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2141424979}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1005.53375, y: 139.78345, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -6338,7 +6303,6 @@ SceneRoots:
   - {fileID: 1369727756}
   - {fileID: 1761451866}
   - {fileID: 665280085}
-  - {fileID: 2141424981}
   - {fileID: 1274117911}
   - {fileID: 500087758}
   - {fileID: 761149256}

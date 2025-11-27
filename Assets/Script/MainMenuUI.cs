@@ -15,24 +15,50 @@ public class MainMenuUI : MonoBehaviour
 
     public void OnPlay()
     {
-        GameFlowManager.Instance?.StartNewGame();
+        if (SfxManager.Instance != null)
+        {
+            SfxManager.Instance.PlayButtonClick();
+        }
+        // Tiếp tục từ level đã chơi gần nhất thay vì reset về level 1
+        GameFlowManager.Instance?.ContinueGame();
     }
 
     public void OnLevelSelect()
     {
+        if (SfxManager.Instance != null)
+        {
+            SfxManager.Instance.PlayButtonClick();
+        }
         GameFlowManager.Instance?.LoadLevelSelect();
     }
 
     public void OnSettings()
     {
+        if (SfxManager.Instance != null)
+        {
+            SfxManager.Instance.PlayButtonClick();
+        }
+        
         if (settingsPanel != null)
         {
+            bool isOpening = !settingsPanel.activeSelf;
             settingsPanel.SetActive(!settingsPanel.activeSelf);
+            
+            // Refresh toggles khi mở settings panel
+            if (isOpening && SettingsManager.Instance != null)
+            {
+                SettingsManager.Instance.RefreshToggles();
+            }
         }
     }
 
     public void OnCloseSettings()
     {
+        if (SfxManager.Instance != null)
+        {
+            SfxManager.Instance.PlayButtonClick();
+        }
+        
         if (settingsPanel != null && settingsPanel.activeSelf)
         {
             settingsPanel.SetActive(false);
@@ -41,6 +67,11 @@ public class MainMenuUI : MonoBehaviour
 
     public void OnQuitGame()
     {
+        if (SfxManager.Instance != null)
+        {
+            SfxManager.Instance.PlayButtonClick();
+        }
+        
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else

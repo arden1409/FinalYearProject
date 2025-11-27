@@ -86,6 +86,11 @@ public class LevelButton : MonoBehaviour
             return;
         }
 
+        if (SfxManager.Instance != null)
+        {
+            SfxManager.Instance.PlayButtonClick();
+        }
+
         Debug.Log($"[LevelButton] Start level {levelId}");
         GameFlowManager.Instance.StartLevel(levelId);
     }

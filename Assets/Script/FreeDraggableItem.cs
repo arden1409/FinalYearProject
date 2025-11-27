@@ -268,6 +268,12 @@ public class FreeDraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler,
         {
             UndoRedoManager.Instance.RecordActionAfter(this);
         }
+        
+        // Phát âm thanh khi đặt item thành công
+        if (SfxManager.Instance != null)
+        {
+            SfxManager.Instance.PlayPlaceItem();
+        }
     }
 
     private IEnumerator MonitorPosition(Vector3 expectedPosition)

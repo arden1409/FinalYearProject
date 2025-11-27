@@ -99,7 +99,9 @@ public class GameFlowManager : MonoBehaviour
         string key = ProgressKeyPrefix + level.levelId;
         if (!PlayerPrefs.HasKey(key))
         {
-            return new LevelProgress(level.levelId, level.unlockedByDefault);
+            LevelProgress newProgress = new LevelProgress(level.levelId, level.unlockedByDefault);
+            Debug.Log($"[GameFlowManager] Created new progress for {level.levelId}: Unlocked={newProgress.unlocked}");
+            return newProgress;
         }
 
         string json = PlayerPrefs.GetString(key);
@@ -107,15 +109,28 @@ public class GameFlowManager : MonoBehaviour
         if (progress == null)
         {
             progress = new LevelProgress(level.levelId, level.unlockedByDefault);
+            Debug.LogWarning($"[GameFlowManager] Failed to parse progress for {level.levelId}, using default");
+        }
+        else
+        {
+            Debug.Log($"[GameFlowManager] Loaded progress for {level.levelId}: Unlocked={progress.unlocked}, Completed={progress.completed}, Score={progress.bestScore}");
         }
         return progress;
     }
 
     private void SaveLevelProgress(LevelProgress progress)
     {
+        if (progress == null)
+            return;
+            
         string json = JsonUtility.ToJson(progress);
-        PlayerPrefs.SetString(ProgressKeyPrefix + progress.levelId, json);
-        PlayerPrefs.Save();
+        string key = ProgressKeyPrefix + progress.levelId;
+        PlayerPrefs.SetString(key, json);
+        PlayerPrefs.Save(); // Đảm bảo lưu ngay vào disk
+        
+        // Debug log để kiểm tra
+        Debug.Log($"[GameFlowManager] Saved progress for {progress.levelId}: Unlocked={progress.unlocked}, Completed={progress.completed}, Score={progress.bestScore}");
+        
         onProgressUpdated?.Invoke(progress);
     }
 
@@ -163,13 +178,29 @@ public class GameFlowManager : MonoBehaviour
     public void ContinueGame()
     {
         string lastLevelId = PlayerPrefs.GetString(LastLevelKey, string.Empty);
-        if (string.IsNullOrEmpty(lastLevelId))
+        
+        // Nếu có LAST_LEVEL và level đó đã unlock, tiếp tục từ đó
+        if (!string.IsNullOrEmpty(lastLevelId))
         {
-            LoadLevelSelect();
-            return;
+            if (progressLookup.TryGetValue(lastLevelId, out LevelProgress progress) && progress.unlocked)
+            {
+                StartLevel(lastLevelId, playStoryIntro: false);
+                return;
+            }
         }
-
-        StartLevel(lastLevelId, playStoryIntro: false);
+        
+        // Nếu không có LAST_LEVEL hoặc level đó bị lock, tìm level đầu tiên đã unlock
+        foreach (var level in levels)
+        {
+            if (progressLookup.TryGetValue(level.levelId, out LevelProgress levelProgress) && levelProgress.unlocked)
+            {
+                StartLevel(level.levelId, playStoryIntro: false);
+                return;
+            }
+        }
+        
+        // Nếu không có level nào unlock, chuyển sang LevelSelect
+        LoadLevelSelect();
     }
 
     public void StartLevel(string levelId, bool playStoryIntro = true)
@@ -190,6 +221,7 @@ public class GameFlowManager : MonoBehaviour
         CurrentLevel = definition;
         CurrentLevelProgress = progress;
         PlayerPrefs.SetString(LastLevelKey, levelId);
+        PlayerPrefs.Save();
 
         if (playStoryIntro && !string.IsNullOrEmpty(definition.storyIntroId))
         {
@@ -291,13 +323,21 @@ public class GameFlowManager : MonoBehaviour
             return;
 
         LevelDefinition next = levels[idx + 1];
-        if (progressLookup.TryGetValue(next.levelId, out LevelProgress progress))
+        
+        // Đảm bảo progress entry tồn tại
+        if (!progressLookup.TryGetValue(next.levelId, out LevelProgress progress))
         {
-            if (!progress.unlocked)
-            {
-                progress.unlocked = true;
-                SaveLevelProgress(progress);
-            }
+            // Tạo entry mới nếu chưa có
+            progress = new LevelProgress(next.levelId, next.unlockedByDefault);
+            progressLookup[next.levelId] = progress;
+        }
+        
+        // Unlock và lưu ngay lập tức
+        if (!progress.unlocked)
+        {
+            progress.unlocked = true;
+            SaveLevelProgress(progress);
+            Debug.Log($"[GameFlowManager] Unlocked level: {next.levelId}");
         }
     }
 

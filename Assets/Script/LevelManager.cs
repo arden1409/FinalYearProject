@@ -213,11 +213,22 @@ public class LevelManager : MonoBehaviour
     private void OnDoneButtonClicked()
     {
         if (!readyToComplete || levelCompleted) return;
+        
+        if (SfxManager.Instance != null)
+        {
+            SfxManager.Instance.PlayButtonClick();
+        }
+        
         CompleteLevel();
     }
     
     public void RestartLevel()
     {
+        if (SfxManager.Instance != null)
+        {
+            SfxManager.Instance.PlayButtonClick();
+        }
+        
         if (cardboardBox != null)
         {
             cardboardBox.ResetBox();
@@ -253,6 +264,11 @@ public class LevelManager : MonoBehaviour
     
     public void LoadNextLevel()
     {
+        if (SfxManager.Instance != null)
+        {
+            SfxManager.Instance.PlayButtonClick();
+        }
+        
         if (GameFlowManager.Instance != null)
         {
             GameFlowManager.Instance.LoadNextLevelImmediate();

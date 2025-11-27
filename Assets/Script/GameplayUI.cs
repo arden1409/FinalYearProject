@@ -140,6 +140,11 @@ public class GameplayUI : MonoBehaviour
 
     public void OnMenuButtonClicked()
     {
+        if (SfxManager.Instance != null)
+        {
+            SfxManager.Instance.PlayButtonClick();
+        }
+        
         if (pauseMenuUI != null)
         {
             pauseMenuUI.TogglePause();
@@ -154,6 +159,10 @@ public class GameplayUI : MonoBehaviour
     {
         if (undoRedoManager != null && undoRedoManager.CanUndo())
         {
+            if (SfxManager.Instance != null)
+            {
+                SfxManager.Instance.PlayButtonClick();
+            }
             undoRedoManager.Undo();
         }
     }
@@ -162,6 +171,10 @@ public class GameplayUI : MonoBehaviour
     {
         if (undoRedoManager != null && undoRedoManager.CanRedo())
         {
+            if (SfxManager.Instance != null)
+            {
+                SfxManager.Instance.PlayButtonClick();
+            }
             undoRedoManager.Redo();
         }
     }
@@ -170,6 +183,10 @@ public class GameplayUI : MonoBehaviour
     {
         if (hintManager != null)
         {
+            if (SfxManager.Instance != null)
+            {
+                SfxManager.Instance.PlayButtonClick();
+            }
             hintManager.ShowHint();
         }
     }

@@ -138,11 +138,20 @@ public class PauseMenuUI : MonoBehaviour
 
     public void OnContinue()
     {
+        if (SfxManager.Instance != null)
+        {
+            SfxManager.Instance.PlayButtonClick();
+        }
         ResumeGame();
     }
 
     public void OnSettings()
     {
+        if (SfxManager.Instance != null)
+        {
+            SfxManager.Instance.PlayButtonClick();
+        }
+        
         // Luôn mở Settings Panel: Ẩn Pause Menu Background, hiện Settings Panel
         // Giữ PausePanel (overlay đen) để SettingsPanel có thể hiển thị
         if (settingsPanel != null)
@@ -157,6 +166,7 @@ public class PauseMenuUI : MonoBehaviour
             settingsPanel.SetActive(true);
             
             // Refresh toggles khi mở settings panel
+            // SettingsPanelHelper sẽ tự động gán toggles khi settings panel được enable
             if (SettingsManager.Instance != null)
             {
                 SettingsManager.Instance.RefreshToggles();
@@ -166,6 +176,11 @@ public class PauseMenuUI : MonoBehaviour
 
     public void OnSettingsBack()
     {
+        if (SfxManager.Instance != null)
+        {
+            SfxManager.Instance.PlayButtonClick();
+        }
+        
         // Đóng settings panel và hiện lại pause menu background
         if (settingsPanel != null)
         {
@@ -183,6 +198,11 @@ public class PauseMenuUI : MonoBehaviour
 
     public void OnBackToMenu()
     {
+        if (SfxManager.Instance != null)
+        {
+            SfxManager.Instance.PlayButtonClick();
+        }
+        
         // Resume game trước khi quay về menu
         ResumeGame();
 

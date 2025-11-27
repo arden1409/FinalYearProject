@@ -332,6 +332,12 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         {
             UndoRedoManager.Instance.RecordActionAfter(this);
         }
+        
+        // Phát âm thanh khi đặt item thành công
+        if (SfxManager.Instance != null)
+        {
+            SfxManager.Instance.PlayPlaceItem();
+        }
     }
 
     public void OnPointerEnter(PointerEventData eventData)

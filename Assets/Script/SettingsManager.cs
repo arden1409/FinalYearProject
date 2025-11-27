@@ -1,18 +1,8 @@
 using UnityEngine;
-using UnityEngine.Audio;
 using UnityEngine.UI;
 
 public class SettingsManager : MonoBehaviour
 {
-    [Header("Audio Mixer (Optional)")]
-    [SerializeField] private AudioMixer audioMixer;
-    [SerializeField] private string musicVolumeParameter = "MusicVolume";
-    [SerializeField] private string soundVolumeParameter = "SoundVolume";
-
-    [Header("Audio Sources (Fallback if no mixer)")]
-    [SerializeField] private AudioSource musicAudioSource;
-    [SerializeField] private AudioSource soundAudioSource;
-
     [Header("UI References")]
     [SerializeField] private Toggle musicToggle;
     [SerializeField] private Toggle soundToggle;
@@ -45,6 +35,12 @@ public class SettingsManager : MonoBehaviour
     private void Start()
     {
         SetupToggles();
+        ApplySettings();
+    }
+    
+    private void OnEnable()
+    {
+        // Đảm bảo settings được áp dụng khi manager được enable
         ApplySettings();
     }
 
@@ -95,29 +91,19 @@ public class SettingsManager : MonoBehaviour
 
     private void ApplyMusicSettings()
     {
-        float volume = isMusicOn ? 0f : -80f; // 0 = max, -80 = muted
-
-        if (audioMixer != null && !string.IsNullOrEmpty(musicVolumeParameter))
+        // Đồng bộ với MusicManager
+        if (MusicManager.Instance != null)
         {
-            audioMixer.SetFloat(musicVolumeParameter, volume);
-        }
-        else if (musicAudioSource != null)
-        {
-            musicAudioSource.mute = !isMusicOn;
+            MusicManager.Instance.Mute(!isMusicOn);
         }
     }
 
     private void ApplySoundSettings()
     {
-        float volume = isSoundOn ? 0f : -80f; // 0 = max, -80 = muted
-
-        if (audioMixer != null && !string.IsNullOrEmpty(soundVolumeParameter))
+        // Đồng bộ với SfxManager
+        if (SfxManager.Instance != null)
         {
-            audioMixer.SetFloat(soundVolumeParameter, volume);
-        }
-        else if (soundAudioSource != null)
-        {
-            soundAudioSource.mute = !isSoundOn;
+            SfxManager.Instance.Mute(!isSoundOn);
         }
     }
 
