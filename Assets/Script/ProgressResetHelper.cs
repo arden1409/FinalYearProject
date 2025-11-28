@@ -61,7 +61,6 @@ public class ProgressResetHelper : MonoBehaviour
         }
         else
         {
-            // Fallback: delete common level IDs
             for (int i = 1; i <= 10; i++)
             {
                 string[] possibleIds = { $"Level{i}", $"Level_{i}", $"Level {i}", $"Level1", $"Level2", $"Level3" };

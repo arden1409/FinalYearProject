@@ -55,10 +55,8 @@ public class HintManager : MonoBehaviour
             hintCloseButton.onClick.AddListener(CloseHint);
         }
 
-        // Find Text component in cooldownTextObject (search in children too)
         if (cooldownTextObject != null)
         {
-            // Try TextMeshProUGUI first (more commonly used)
             Component[] allComponents = cooldownTextObject.GetComponents<Component>();
             
             foreach (Component comp in allComponents)
@@ -119,7 +117,6 @@ public class HintManager : MonoBehaviour
                 }
             }
             
-            // Hide cooldown text initially (only show after using hint)
             if (cooldownText != null)
             {
                 cooldownText.gameObject.SetActive(false);
@@ -237,7 +234,6 @@ public class HintManager : MonoBehaviour
 
     private void UpdateCooldownText()
     {
-        // Try to find Text component again if not found (even if GameObject is inactive)
         if (cooldownText == null 
 #if UNITY_TMPRO
             && cooldownTextTMP == null
@@ -316,8 +312,6 @@ public class HintManager : MonoBehaviour
             }
         }
 
-        // Only show cooldown if hint has been used (lastHintTime > 0)
-        // lastHintTime = -999f means hint hasn't been used yet
         if (lastHintTime < 0f)
         {
             if (cooldownText != null && cooldownText.gameObject.activeSelf)

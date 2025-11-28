@@ -1,9 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-/// <summary>
-/// Global music controller that switches background tracks per scene/level.
-/// </summary>
 public class MusicManager : MonoBehaviour
 {
     public static MusicManager Instance { get; private set; }
@@ -48,9 +45,6 @@ public class MusicManager : MonoBehaviour
         UpdateMusicForScene(scene.name);
     }
 
-    /// <summary>
-    /// Call this manually if you want to change music without scene load.
-    /// </summary>
     public void UpdateMusicForScene(string sceneName)
     {
         AudioClip targetClip = ResolveClipForScene(sceneName);

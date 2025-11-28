@@ -12,7 +12,3 @@ public static class DragSortingUtility
 
 
 
-
-
-
-

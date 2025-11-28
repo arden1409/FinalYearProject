@@ -30,7 +30,6 @@ public class SfxManager : MonoBehaviour
         sfxSource.loop = false;
         sfxSource.priority = 0;
         
-        // Separate AudioSource for button click - always ready, won't be blocked
         GameObject buttonClickObj = new GameObject("ButtonClickAudioSource");
         buttonClickObj.transform.SetParent(transform);
         buttonClickSource = buttonClickObj.AddComponent<AudioSource>();
@@ -45,7 +44,6 @@ public class SfxManager : MonoBehaviour
 
     private void Start()
     {
-        // Preload clips in Start() to ensure they're ready
         if (buttonClickClip != null)
         {
             buttonClickClip.LoadAudioData();
@@ -64,7 +62,6 @@ public class SfxManager : MonoBehaviour
 
     public void PlayButtonClick()
     {
-        // Use separate AudioSource for button click to play immediately
         if (buttonClickClip == null || buttonClickSource == null)
             return;
 
@@ -73,7 +70,6 @@ public class SfxManager : MonoBehaviour
             buttonClickClip.LoadAudioData();
         }
 
-        // Use PlayOneShot for button click - faster than Play() in some cases
         buttonClickSource.PlayOneShot(buttonClickClip, 1f);
     }
 
@@ -111,7 +107,6 @@ public class SfxManager : MonoBehaviour
             clip.LoadAudioData();
         }
 
-        // Use Play() instead of PlayOneShot to reduce delay
         if (source.isPlaying)
         {
             source.Stop();
@@ -120,7 +115,6 @@ public class SfxManager : MonoBehaviour
         source.clip = clip;
         source.Play();
         
-        // Force play immediately (in case of audio system delay)
         if (!source.isPlaying)
         {
             source.Play();

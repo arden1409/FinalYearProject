@@ -38,7 +38,6 @@ public class LevelManager : MonoBehaviour
     
     void Start()
     {
-        // Check if Complete Panel should be shown after Story Outro
         if (GameFlowManager.Instance != null)
         {
             if (GameFlowManager.Instance.ShouldShowCompletePanel(out int score))
@@ -48,7 +47,6 @@ public class LevelManager : MonoBehaviour
             }
         }
         
-        // Count total items from cardboard box
         if (cardboardBox != null)
         {
             totalItems = 0;
@@ -183,7 +181,6 @@ public class LevelManager : MonoBehaviour
         Debug.Log("Level Completed! Stars: " + starsEarned);
     }
     
-    // Show Complete Panel (called after Story Outro)
     private void ShowCompletePanel(int score)
     {
         levelCompleted = true;

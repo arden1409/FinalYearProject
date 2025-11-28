@@ -19,9 +19,7 @@ public class GridSnapZone : MonoBehaviour, IDropHandler
 
 	[Header("Isometric")]
 	public bool isIsometric = false;
-	[Tooltip("Tile size in world units or pixels (UI) before rotation/skew for iso look")]
 	public Vector2 isoTileSize = new Vector2(1f, 0.5f);
-	[Tooltip("Optional Y offset per column to create staggered look (0 = diamond aligned)")]
 	public float isoColumnYOffset = 0f;
 
 	private GridCell[,] cells;
@@ -33,7 +31,6 @@ public class GridSnapZone : MonoBehaviour, IDropHandler
 
 	public void BuildGrid()
 	{
-		// Clear existing children that might be leftover runtime cells
 		cells = new GridCell[columns, rows];
 		for (int y = 0; y < rows; y++)
 		{
@@ -62,7 +59,6 @@ public class GridSnapZone : MonoBehaviour, IDropHandler
 			);
 		}
 
-		// Isometric layout: diamond grid using isoTileSize, optional stagger
 		float w = isoTileSize.x;
 		float h = isoTileSize.y;
 		float isoX = (x - y) * (w * 0.5f);
@@ -120,7 +116,6 @@ public class GridSnapZone : MonoBehaviour, IDropHandler
 	{
 		if (!drawGizmos) return;
 
-		// Draw in local space so positions match ComputeCellLocalPosition
 		Gizmos.matrix = transform.localToWorldMatrix;
 
 		float width = columns * cellSize.x + (columns - 1) * cellSpacing.x;
@@ -128,11 +123,9 @@ public class GridSnapZone : MonoBehaviour, IDropHandler
 
 		if (!isIsometric)
 		{
-			// Outline of entire grid (rectangular)
 			Gizmos.color = gizmoOutlineColor;
 			Gizmos.DrawWireCube(Vector3.zero, new Vector3(width, height, 0.01f));
 
-			// Individual cells
 			Gizmos.color = gizmoCellColor;
 			Vector3 cellSize3 = new Vector3(cellSize.x, cellSize.y, 0.005f);
 			for (int y = 0; y < rows; y++)
@@ -146,7 +139,6 @@ public class GridSnapZone : MonoBehaviour, IDropHandler
 		}
 		else
 		{
-			// Isometric: draw diamond tiles
 			Gizmos.color = gizmoCellColor;
 			for (int y = 0; y < rows; y++)
 			{
@@ -161,7 +153,6 @@ public class GridSnapZone : MonoBehaviour, IDropHandler
 
 	private void DrawIsoDiamondGizmo(Vector3 center, Vector2 tile)
 	{
-		// Four points of a diamond (lozenge)
 		Vector3 right = new Vector3(tile.x * 0.5f, 0f, 0f);
 		Vector3 left = -right;
 		Vector3 up = new Vector3(0f, tile.y * 0.5f, 0f);

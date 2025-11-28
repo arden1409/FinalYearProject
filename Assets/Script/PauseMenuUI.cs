@@ -52,7 +52,6 @@ public class PauseMenuUI : MonoBehaviour
 
     private void Update()
     {
-        // Check ESC key for pause (supports both new and old Input System)
         bool escapePressed = false;
         
 #if ENABLE_INPUT_SYSTEM
@@ -66,7 +65,6 @@ public class PauseMenuUI : MonoBehaviour
 
         if (escapePressed)
         {
-            // If in Settings Panel, return to Pause Panel
             if (settingsPanel != null && settingsPanel.activeSelf)
             {
                 OnSettingsBack();
@@ -145,7 +143,6 @@ public class PauseMenuUI : MonoBehaviour
         
         if (settingsPanel != null)
         {
-            // Hide Pause Menu Background, show Settings Panel
             if (pauseMenuBackground != null)
             {
                 pauseMenuBackground.SetActive(false);

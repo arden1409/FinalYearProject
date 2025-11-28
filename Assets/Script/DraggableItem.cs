@@ -30,7 +30,6 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     [Tooltip("Move this item to the top sorting order when clicked (requires autoSortByY = false).")]
     public bool bringToFrontOnClick = true;
 
-    // Private variables
     private Vector3 originalPosition;
     private Transform originalParent;
     private int originalSiblingIndex;
@@ -120,7 +119,6 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         GridCell parentCell = transform.parent != null ? transform.parent.GetComponent<GridCell>() : null;
         if (parentCell != null) parentCell.SetOccupied(null);
 
-        // Record state before moving for undo/redo
         if (UndoRedoManager.Instance != null)
         {
             UndoRedoManager.Instance.RecordActionBefore(this);
@@ -327,13 +325,11 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             }
         }
 
-        // Record state after snap for undo/redo
         if (UndoRedoManager.Instance != null)
         {
             UndoRedoManager.Instance.RecordActionAfter(this);
         }
         
-        // Play sound when item is placed successfully
         if (SfxManager.Instance != null)
         {
             SfxManager.Instance.PlayPlaceItem();
