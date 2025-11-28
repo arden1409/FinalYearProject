@@ -193,9 +193,6 @@ public class UndoRedoManager : MonoBehaviour
 
         foreach (var beforeState in record.beforeStates)
         {
-            MonoBehaviour itemObj = beforeState.GetItem();
-            if (itemObj == null) continue;
-
             ItemState afterState = null;
             foreach (var after in record.afterStates)
             {
@@ -207,18 +204,27 @@ public class UndoRedoManager : MonoBehaviour
                 }
             }
 
-            if (afterState != null && afterState.currentCell != null && beforeState.item != null)
+            if (beforeState.item != null)
             {
-                afterState.currentCell.SetOccupied(null);
+                var draggable = beforeState.item;
+
+                if (afterState != null && afterState.currentCell != null)
+                {
+                    afterState.currentCell.SetOccupied(null);
+                }
+
+                draggable.transform.SetParent(beforeState.parent, true);
+                draggable.transform.position = beforeState.position;
+                draggable.transform.SetSiblingIndex(beforeState.siblingIndex);
+
+                if (beforeState.currentCell != null)
+                {
+                    beforeState.currentCell.SetOccupied(draggable);
+                }
             }
-
-            itemObj.transform.SetParent(beforeState.parent, true);
-            itemObj.transform.position = beforeState.position;
-            itemObj.transform.SetSiblingIndex(beforeState.siblingIndex);
-
-            if (beforeState.currentCell != null && beforeState.item != null)
+            else if (beforeState.freeItem != null)
             {
-                beforeState.currentCell.SetOccupied(beforeState.item);
+                beforeState.freeItem.ApplyHistoryState(beforeState.position, beforeState.parent, beforeState.siblingIndex);
             }
         }
 
@@ -233,9 +239,6 @@ public class UndoRedoManager : MonoBehaviour
 
         foreach (var afterState in record.afterStates)
         {
-            MonoBehaviour itemObj = afterState.GetItem();
-            if (itemObj == null) continue;
-
             ItemState beforeState = null;
             foreach (var before in record.beforeStates)
             {
@@ -247,18 +250,27 @@ public class UndoRedoManager : MonoBehaviour
                 }
             }
 
-            if (beforeState != null && beforeState.currentCell != null && afterState.item != null)
+            if (afterState.item != null)
             {
-                beforeState.currentCell.SetOccupied(null);
+                var draggable = afterState.item;
+
+                if (beforeState != null && beforeState.currentCell != null)
+                {
+                    beforeState.currentCell.SetOccupied(null);
+                }
+
+                draggable.transform.SetParent(afterState.parent, true);
+                draggable.transform.position = afterState.position;
+                draggable.transform.SetSiblingIndex(afterState.siblingIndex);
+
+                if (afterState.currentCell != null)
+                {
+                    afterState.currentCell.SetOccupied(afterState.item);
+                }
             }
-
-            itemObj.transform.SetParent(afterState.parent, true);
-            itemObj.transform.position = afterState.position;
-            itemObj.transform.SetSiblingIndex(afterState.siblingIndex);
-
-            if (afterState.currentCell != null && afterState.item != null)
+            else if (afterState.freeItem != null)
             {
-                afterState.currentCell.SetOccupied(afterState.item);
+                afterState.freeItem.ApplyHistoryState(afterState.position, afterState.parent, afterState.siblingIndex);
             }
         }
 

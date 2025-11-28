@@ -311,6 +311,17 @@ public class FreeDraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler,
         transform.SetSiblingIndex(originalSiblingIndex);
     }
 
+    public void ApplyHistoryState(Vector3 position, Transform parent, int siblingIndex)
+    {
+        transform.SetParent(parent, true);
+        transform.position = position;
+        transform.SetSiblingIndex(siblingIndex);
+        originalParent = parent;
+        originalPosition = position;
+        originalSiblingIndex = siblingIndex;
+        isPositionLocked = true;
+    }
+
     private void BringToFrontIfNeeded()
     {
         if (!bringToFrontOnClick)
