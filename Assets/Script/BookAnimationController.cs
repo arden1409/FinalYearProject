@@ -2,24 +2,24 @@ using System.Collections;
 using UnityEngine;
 
 /// <summary>
-/// Điều khiển animation quyển sách ở Level Select:
-/// - Phát animation mở sách (state BookAnimate hoặc tên bạn cấu hình).
-/// - Khi animation kết thúc (gọi từ Animation Event OnBookOpened), hiện panel level bằng hiệu ứng fade-in.
+/// Controls book animation in Level Select:
+/// - Plays book opening animation (state BookAnimate or configured name).
+/// - When animation ends (called from Animation Event OnBookOpened), shows level panel with fade-in effect.
 /// </summary>
 public class BookAnimationController : MonoBehaviour
 {
-    [Header("Tham chiếu")]
-    [Tooltip("Animator gắn trên object quyển sách")]
+    [Header("References")]
+    [Tooltip("Animator attached to book object")]
     [SerializeField] private Animator bookAnimator;
 
-    [Tooltip("Panel chứa các nút chọn level")]
+    [Tooltip("Panel containing level selection buttons")]
     [SerializeField] private GameObject levelSelectPanel;
 
-    [Tooltip("CanvasGroup của panel để làm hiệu ứng fade-in")]
+    [Tooltip("CanvasGroup of panel for fade-in effect")]
     [SerializeField] private CanvasGroup levelSelectCanvasGroup;
 
-    [Header("Thiết lập animation")]
-    [Tooltip("Tên state/clip mở sách trong Animator (ví dụ: BookAnimate)")]
+    [Header("Animation Settings")]
+    [Tooltip("Name of opening state/clip in Animator (e.g. BookAnimate)")]
     [SerializeField] private string openAnimationName = "BookAnimate";
 
     [SerializeField] private bool playOnStart = true;
@@ -63,7 +63,7 @@ public class BookAnimationController : MonoBehaviour
     }
 
     /// <summary>
-    /// Gọi khi muốn phát animation mở sách (thường là Start).
+    /// Call to play book opening animation (usually from Start).
     /// </summary>
     public void PlayOpenAnimation()
     {
@@ -81,7 +81,7 @@ public class BookAnimationController : MonoBehaviour
     }
 
     /// <summary>
-    /// Gọi từ Animation Event ở frame cuối clip mở sách.
+    /// Called from Animation Event at the end of opening clip.
     /// </summary>
     public void OnBookOpened()
     {

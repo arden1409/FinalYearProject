@@ -71,6 +71,10 @@ public class GameFlowManager : MonoBehaviour
 
     private const string HasSeenCharacterIntroKey = "HAS_SEEN_CHARACTER_INTRO";
     
+    // Store info to show Complete Panel after Story Outro
+    private int pendingCompleteScore = 0;
+    private bool shouldShowCompletePanelAfterOutro = false;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -87,10 +91,9 @@ public class GameFlowManager : MonoBehaviour
     
     private void Start()
     {
-        // Chỉ load character intro khi game khởi động lần đầu (Boot state)
+        // Only load character intro on first boot
         if (CurrentState == GameState.Boot)
         {
-            // Kiểm tra xem đã xem character intro chưa (có thể bỏ qua nếu muốn luôn hiển thị)
             bool hasSeenIntro = PlayerPrefs.GetInt(HasSeenCharacterIntroKey, 0) == 1;
             
             if (!hasSeenIntro && !string.IsNullOrEmpty(characterIntroScene))
@@ -112,7 +115,7 @@ public class GameFlowManager : MonoBehaviour
     
     public void NotifyCharacterIntroFinished()
     {
-        // Đánh dấu đã xem character intro
+        // Mark character intro as seen
         PlayerPrefs.SetInt(HasSeenCharacterIntroKey, 1);
         PlayerPrefs.Save();
         
@@ -164,9 +167,8 @@ public class GameFlowManager : MonoBehaviour
         string json = JsonUtility.ToJson(progress);
         string key = ProgressKeyPrefix + progress.levelId;
         PlayerPrefs.SetString(key, json);
-        PlayerPrefs.Save(); // Đảm bảo lưu ngay vào disk
+        PlayerPrefs.Save();
         
-        // Debug log để kiểm tra
         Debug.Log($"[GameFlowManager] Saved progress for {progress.levelId}: Unlocked={progress.unlocked}, Completed={progress.completed}, Score={progress.bestScore}");
         
         onProgressUpdated?.Invoke(progress);
@@ -218,27 +220,27 @@ public class GameFlowManager : MonoBehaviour
     {
         string lastLevelId = PlayerPrefs.GetString(LastLevelKey, string.Empty);
         
-        // Nếu có LAST_LEVEL và level đó đã unlock, tiếp tục từ đó
+        // If we have a last level and it's unlocked, continue from there
         if (!string.IsNullOrEmpty(lastLevelId))
         {
             if (progressLookup.TryGetValue(lastLevelId, out LevelProgress progress) && progress.unlocked)
             {
-                StartLevel(lastLevelId, playStoryIntro: false);
+                StartLevel(lastLevelId, playStoryIntro: true);
                 return;
             }
         }
         
-        // Nếu không có LAST_LEVEL hoặc level đó bị lock, tìm level đầu tiên đã unlock
+        // Otherwise find first unlocked level
         foreach (var level in levels)
         {
             if (progressLookup.TryGetValue(level.levelId, out LevelProgress levelProgress) && levelProgress.unlocked)
             {
-                StartLevel(level.levelId, playStoryIntro: false);
+                StartLevel(level.levelId, playStoryIntro: true);
                 return;
             }
         }
-        
-        // Nếu không có level nào unlock, chuyển sang LevelSelect
+
+        // No unlocked levels, go to level select
         LoadLevelSelect();
     }
 
@@ -262,13 +264,17 @@ public class GameFlowManager : MonoBehaviour
         PlayerPrefs.SetString(LastLevelKey, levelId);
         PlayerPrefs.Save();
 
+        Debug.Log($"[GameFlowManager] StartLevel - Level ID: {levelId}, Story Intro ID: {definition.storyIntroId}, Story Outro ID: {definition.storyOutroId}");
+
         if (playStoryIntro && !string.IsNullOrEmpty(definition.storyIntroId))
         {
+            Debug.Log($"[GameFlowManager] Loading Story Intro: {definition.storyIntroId}");
             TransitionState(GameState.StoryIntro);
             LoadSceneAsync(storyScene);
         }
         else
         {
+            Debug.Log($"[GameFlowManager] Skipping Story Intro, loading gameplay scene directly");
             TransitionState(GameState.Gameplay);
             LoadSceneAsync(definition.levelScene);
         }
@@ -305,8 +311,12 @@ public class GameFlowManager : MonoBehaviour
             return;
         }
 
+        // If there's a story outro, play it first, then show Complete Panel
         if (!string.IsNullOrEmpty(CurrentLevel.storyOutroId))
         {
+            Debug.Log($"[GameFlowManager] CompleteLevel - Level ID: {CurrentLevel.levelId}, Story Outro ID: {CurrentLevel.storyOutroId}");
+            pendingCompleteScore = score;
+            shouldShowCompletePanelAfterOutro = true;
             TransitionState(GameState.StoryOutro);
             LoadSceneAsync(storyScene);
         }
@@ -347,14 +357,34 @@ public class GameFlowManager : MonoBehaviour
             return;
         }
 
-        StartLevel(next.levelId, playStoryIntro: false);
+        StartLevel(next.levelId, playStoryIntro: true);
     }
 
     public void NotifyStoryOutroFinished()
     {
-        // Sau khi story outro kết thúc, có thể chuyển sang level tiếp theo hoặc về level select
-        // Hiện tại mặc định về level select, có thể sửa để tự động chuyển level tiếp theo nếu muốn
-        LoadLevelSelect();
+        // After outro ends, return to level scene to show Complete Panel
+        if (shouldShowCompletePanelAfterOutro && CurrentLevel != null)
+        {
+            TransitionState(GameState.Gameplay);
+            LoadSceneAsync(CurrentLevel.levelScene);
+        }
+        else
+        {
+            LoadLevelSelect();
+        }
+    }
+    
+    // Check if Complete Panel should be shown
+    public bool ShouldShowCompletePanel(out int score)
+    {
+        score = pendingCompleteScore;
+        if (shouldShowCompletePanelAfterOutro)
+        {
+            shouldShowCompletePanelAfterOutro = false;
+            pendingCompleteScore = 0;
+            return true;
+        }
+        return false;
     }
 
     private void UnlockNextLevel(string completedLevelId)
@@ -365,15 +395,14 @@ public class GameFlowManager : MonoBehaviour
 
         LevelDefinition next = levels[idx + 1];
         
-        // Đảm bảo progress entry tồn tại
+        // Ensure progress entry exists
         if (!progressLookup.TryGetValue(next.levelId, out LevelProgress progress))
         {
-            // Tạo entry mới nếu chưa có
             progress = new LevelProgress(next.levelId, next.unlockedByDefault);
             progressLookup[next.levelId] = progress;
         }
         
-        // Unlock và lưu ngay lập tức
+        // Unlock and save immediately
         if (!progress.unlocked)
         {
             progress.unlocked = true;

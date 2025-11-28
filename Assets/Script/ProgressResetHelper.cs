@@ -1,16 +1,16 @@
 using UnityEngine;
 
 /// <summary>
-/// Helper script để reset tất cả progress của game về trạng thái ban đầu.
-/// Dùng khi cần demo game như mới hoàn toàn.
+/// Helper script to reset all game progress to initial state.
+/// Use when you need to demo the game as completely new.
 /// </summary>
 public class ProgressResetHelper : MonoBehaviour
 {
     [Header("Reset Options")]
-    [Tooltip("Reset ngay khi Start() - dùng cho demo")]
+    [Tooltip("Reset immediately on Start() - use for demo")]
     [SerializeField] private bool resetOnStart = false;
     
-    [Tooltip("Reset cả Settings (Music/Sound toggles)")]
+    [Tooltip("Also reset Settings (Music/Sound toggles)")]
     [SerializeField] private bool resetSettings = false;
 
     private void Start()
@@ -22,39 +22,33 @@ public class ProgressResetHelper : MonoBehaviour
     }
 
     /// <summary>
-    /// Reset tất cả progress - gọi từ Inspector hoặc code khác
+    /// Reset all progress - call from Inspector or other code
     /// </summary>
     [ContextMenu("Reset All Progress")]
     public void ResetAllProgress()
     {
-        // Reset level progress
         if (GameFlowManager.Instance != null)
         {
             GameFlowManager.Instance.ResetAllProgress();
-            Debug.Log("[ProgressResetHelper] Đã reset tất cả level progress!");
+            Debug.Log("[ProgressResetHelper] Reset all level progress!");
         }
         else
         {
-            // Nếu GameFlowManager chưa tồn tại, xóa trực tiếp PlayerPrefs
             DeleteAllProgressKeys();
         }
 
-        // Reset settings nếu cần
         if (resetSettings)
         {
             ResetSettings();
         }
 
-        Debug.Log("[ProgressResetHelper] ✅ Đã reset tất cả progress! Game sẽ như mới hoàn toàn.");
+        Debug.Log("[ProgressResetHelper] ✅ Reset all progress! Game will be like new.");
     }
 
     private void DeleteAllProgressKeys()
     {
-        // Xóa tất cả keys liên quan đến progress
         PlayerPrefs.DeleteKey("LAST_LEVEL");
         
-        // Xóa tất cả level progress keys
-        // Lấy level IDs từ GameFlowManager nếu có
         if (GameFlowManager.Instance != null && GameFlowManager.Instance.levels != null)
         {
             foreach (var level in GameFlowManager.Instance.levels)
@@ -67,7 +61,7 @@ public class ProgressResetHelper : MonoBehaviour
         }
         else
         {
-            // Fallback: xóa các level IDs phổ biến
+            // Fallback: delete common level IDs
             for (int i = 1; i <= 10; i++)
             {
                 string[] possibleIds = { $"Level{i}", $"Level_{i}", $"Level {i}", $"Level1", $"Level2", $"Level3" };
@@ -79,27 +73,20 @@ public class ProgressResetHelper : MonoBehaviour
         }
         
         PlayerPrefs.Save();
-        Debug.Log("[ProgressResetHelper] Đã xóa tất cả progress keys từ PlayerPrefs!");
+        Debug.Log("[ProgressResetHelper] Deleted all progress keys from PlayerPrefs!");
     }
 
     private void ResetSettings()
     {
-        // Reset settings
         PlayerPrefs.DeleteKey("Settings_Music");
         PlayerPrefs.DeleteKey("Settings_Sound");
         PlayerPrefs.Save();
         
-        // Reset SettingsManager nếu đang tồn tại
-        if (SettingsManager.Instance != null)
-        {
-            // SettingsManager sẽ tự load lại default values khi restart
-        }
-        
-        Debug.Log("[ProgressResetHelper] Đã reset settings!");
+        Debug.Log("[ProgressResetHelper] Reset settings!");
     }
 
     /// <summary>
-    /// Reset chỉ level progress, giữ nguyên settings
+    /// Reset only level progress, keep settings
     /// </summary>
     [ContextMenu("Reset Only Level Progress")]
     public void ResetLevelProgressOnly()
@@ -112,7 +99,7 @@ public class ProgressResetHelper : MonoBehaviour
         {
             DeleteAllProgressKeys();
         }
-        Debug.Log("[ProgressResetHelper] Đã reset level progress!");
+        Debug.Log("[ProgressResetHelper] Reset level progress!");
     }
 }
 

@@ -120,7 +120,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         GridCell parentCell = transform.parent != null ? transform.parent.GetComponent<GridCell>() : null;
         if (parentCell != null) parentCell.SetOccupied(null);
 
-        // Ghi lại trạng thái trước khi di chuyển cho undo/redo
+        // Record state before moving for undo/redo
         if (UndoRedoManager.Instance != null)
         {
             UndoRedoManager.Instance.RecordActionBefore(this);
@@ -327,13 +327,13 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             }
         }
 
-        // Ghi lại trạng thái sau khi snap cho undo/redo
+        // Record state after snap for undo/redo
         if (UndoRedoManager.Instance != null)
         {
             UndoRedoManager.Instance.RecordActionAfter(this);
         }
         
-        // Phát âm thanh khi đặt item thành công
+        // Play sound when item is placed successfully
         if (SfxManager.Instance != null)
         {
             SfxManager.Instance.PlayPlaceItem();

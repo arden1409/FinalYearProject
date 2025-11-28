@@ -2,16 +2,16 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Helper script để gán toggles từ settings panel trong scene hiện tại vào SettingsManager.
-/// Đặt script này vào settings panel hoặc bất kỳ GameObject nào trong scene.
-/// Gán thủ công Music Toggle và Sound Toggle vào các field bên dưới.
+/// Helper script to assign toggles from settings panel in current scene to SettingsManager.
+/// Attach this script to settings panel or any GameObject in the scene.
+/// Manually assign Music Toggle and Sound Toggle to the fields below.
 /// </summary>
 public class SettingsPanelHelper : MonoBehaviour
 {
     [Header("UI References")]
-    [Tooltip("Gán Music Toggle từ settings panel")]
+    [Tooltip("Assign Music Toggle from settings panel")]
     [SerializeField] private Toggle musicToggle;
-    [Tooltip("Gán Sound Toggle từ settings panel")]
+    [Tooltip("Assign Sound Toggle from settings panel")]
     [SerializeField] private Toggle soundToggle;
 
     private void Start()
@@ -21,7 +21,6 @@ public class SettingsPanelHelper : MonoBehaviour
 
     private void OnEnable()
     {
-        // Đảm bảo toggles được gán khi GameObject được enable
         if (SettingsManager.Instance != null)
         {
             AssignToggles();
@@ -48,7 +47,7 @@ public class SettingsPanelHelper : MonoBehaviour
     }
 
     /// <summary>
-    /// Gán toggles thủ công (có thể gọi từ Inspector hoặc code khác)
+    /// Manually assign toggles (can be called from Inspector or other code)
     /// </summary>
     public void SetToggles(Toggle music, Toggle sound)
     {

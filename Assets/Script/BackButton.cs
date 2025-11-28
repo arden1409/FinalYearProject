@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Nút quay lại (Back) đơn giản, dùng GameFlowManager nếu có.
+/// Simple back button, uses GameFlowManager if available.
 /// </summary>
 [RequireComponent(typeof(Button))]
 public class BackButton : MonoBehaviour
@@ -13,7 +13,7 @@ public class BackButton : MonoBehaviour
         LevelSelect
     }
 
-    [Tooltip("Scene/state sẽ quay lại khi ấn nút")]
+    [Tooltip("Scene/state to return to when button is clicked")]
     public BackTarget target = BackTarget.MainMenu;
 
     private Button button;
@@ -28,7 +28,7 @@ public class BackButton : MonoBehaviour
     {
         if (GameFlowManager.Instance == null)
         {
-            Debug.LogWarning("[BackButton] GameFlowManager.Instance is null, dùng LoadScene trực tiếp.");
+            Debug.LogWarning("[BackButton] GameFlowManager.Instance is null, using direct LoadScene.");
             string sceneName = target == BackTarget.MainMenu ? "MainMenu" : "LevelSelect";
             UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
             return;

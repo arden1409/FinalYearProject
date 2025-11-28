@@ -103,16 +103,14 @@ public class StoryManager : MonoBehaviour
             skipButton.onClick.AddListener(OnSkipClicked);
         }
 
-        // Đợi một frame để GameFlowManager có thời gian khởi tạo
+        // Wait a frame for GameFlowManager to initialize
         StartCoroutine(LoadStoryDelayed());
     }
 
     private IEnumerator LoadStoryDelayed()
     {
-        // Đợi 1 frame để GameFlowManager có thời gian khởi tạo
         yield return null;
         
-        // Nếu vẫn null, thử đợi thêm một chút
         if (GameFlowManager.Instance == null)
         {
             yield return new WaitForSeconds(0.1f);
@@ -125,15 +123,11 @@ public class StoryManager : MonoBehaviour
     {
         string storyId = "";
         
-        // Nếu có manual story ID (cho testing), dùng nó
-        if (!string.IsNullOrEmpty(manualStoryId))
+        // Detect from GameFlowManager if available
+        if (GameFlowManager.Instance != null)
         {
-            storyId = manualStoryId;
-        }
-        else if (GameFlowManager.Instance != null)
-        {
-            // Tự động detect từ GameFlowManager
             GameFlowManager.GameState state = GameFlowManager.Instance.CurrentState;
+            Debug.Log($"[StoryManager] Current State: {state}");
 
             if (state == GameFlowManager.GameState.CharacterIntro)
             {
@@ -144,6 +138,11 @@ public class StoryManager : MonoBehaviour
                 if (GameFlowManager.Instance.CurrentLevel != null)
                 {
                     storyId = GameFlowManager.Instance.CurrentLevel.storyIntroId;
+                    Debug.Log($"[StoryManager] Story Intro - Level ID: {GameFlowManager.Instance.CurrentLevel.levelId}, Story ID: {storyId}");
+                }
+                else
+                {
+                    Debug.LogWarning("[StoryManager] CurrentLevel is null in StoryIntro state!");
                 }
             }
             else if (state == GameFlowManager.GameState.StoryOutro)
@@ -151,15 +150,22 @@ public class StoryManager : MonoBehaviour
                 if (GameFlowManager.Instance.CurrentLevel != null)
                 {
                     storyId = GameFlowManager.Instance.CurrentLevel.storyOutroId;
+                    Debug.Log($"[StoryManager] Story Outro - Level ID: {GameFlowManager.Instance.CurrentLevel.levelId}, Story ID: {storyId}");
+                }
+                else
+                {
+                    Debug.LogWarning("[StoryManager] CurrentLevel is null in StoryOutro state!");
                 }
             }
         }
-        else
+        
+        // Only use manual story ID if GameFlowManager not available (for direct scene testing)
+        if (string.IsNullOrEmpty(storyId) && !string.IsNullOrEmpty(manualStoryId))
         {
-            Debug.LogWarning("[StoryManager] GameFlowManager.Instance is null. Set 'Manual Story Id' in Inspector for testing, or ensure GameFlowManager exists in MainMenu scene.");
-            return;
+            storyId = manualStoryId;
+            Debug.Log($"[StoryManager] Using manual story ID (GameFlowManager not available): {storyId}");
         }
-
+        
         if (string.IsNullOrEmpty(storyId))
         {
             Debug.LogWarning("[StoryManager] No story ID found. Skipping story.");
@@ -167,6 +173,7 @@ public class StoryManager : MonoBehaviour
             return;
         }
 
+        Debug.Log($"[StoryManager] Loading story with ID: {storyId}");
         StartStory(storyId);
     }
 
@@ -178,6 +185,19 @@ public class StoryManager : MonoBehaviour
             FinishStory();
             return;
         }
+
+        Debug.Log($"[StoryManager] Searching for story ID: '{storyId}' in database with {storyDatabase.Length} entries.");
+        
+        // Debug: Log all story IDs in database
+        System.Text.StringBuilder dbInfo = new System.Text.StringBuilder("Available story IDs in database: ");
+        foreach (var story in storyDatabase)
+        {
+            if (story != null)
+            {
+                dbInfo.Append($"'{story.storyId}' ");
+            }
+        }
+        Debug.Log(dbInfo.ToString());
 
         System.Collections.Generic.List<StoryData> sequence = new System.Collections.Generic.List<StoryData>();
         foreach (var story in storyDatabase)
@@ -195,6 +215,7 @@ public class StoryManager : MonoBehaviour
             return;
         }
 
+        Debug.Log($"[StoryManager] Found {sequence.Count} page(s) for story ID '{storyId}'");
         currentStorySequence = sequence.ToArray();
         currentPageIndex = 0;
         isStoryActive = true;

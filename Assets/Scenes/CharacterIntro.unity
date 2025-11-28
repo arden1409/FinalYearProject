@@ -148,7 +148,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dba482a893281d843bdb51fc2f9f197f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StoryManager
-  storyDatabase: []
+  storyDatabase:
+  - storyId: CharacterIntro
+    speakerName: Me (Monologue)
+    storyText: "I am an architect.\nI don\u2019t build skyscrapers.\nI arrange the
+      spaces where people leave their emotions behind."
+    speakerPortrait: {fileID: -1702640810121441465, guid: b8c6747ac5418a44fa61ccc487a36929, type: 3}
+    storyImage: {fileID: 0}
+    displayTime: 0
+  - storyId: CharacterIntro
+    speakerName: Me (Monologue)
+    storyText: "Every cafe, every room has its own story.\nAnd through every arrangement\u2026\nI
+      slowly come to understand my own."
+    speakerPortrait: {fileID: -1702640810121441465, guid: b8c6747ac5418a44fa61ccc487a36929, type: 3}
+    storyImage: {fileID: 0}
+    displayTime: 0
   storyPanel: {fileID: 597583355}
   speakerNameText: {fileID: 321171381}
   storyText: {fileID: 1477991043}
@@ -158,6 +172,7 @@ MonoBehaviour:
   skipButton: {fileID: 1340337354}
   autoAdvance: 0
   fadeDuration: 0.3
+  manualStoryId: CharacterIntro
 --- !u!4 &186256278
 Transform:
   m_ObjectHideFlags: 0
@@ -299,8 +314,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -716, y: 99}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: -347.54, y: 121}
+  m_SizeDelta: {x: 695.079, y: 42.552}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &321171380
 CanvasRenderer:
@@ -330,7 +345,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Me
+  m_text: Me (Monologue)
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a72668973361018499c00b8966dec13f, type: 2}
   m_sharedMaterial: {fileID: 3529121228338826141, guid: a72668973361018499c00b8966dec13f, type: 2}
@@ -367,9 +382,9 @@ MonoBehaviour:
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
-  m_characterSpacing: 0
-  m_wordSpacing: 0
-  m_lineSpacing: 0
+  m_characterSpacing: -9.8
+  m_wordSpacing: 4.11
+  m_lineSpacing: 0.84
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -395,7 +410,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 47.44581, y: 0, z: -4.744568, w: 0}
+  m_margin: {x: 40.12, y: 0, z: -4.744568, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -573,7 +588,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 1
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: -235663271
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!224 &644729547
@@ -596,81 +611,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!1 &696524523
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 696524524}
-  - component: {fileID: 696524526}
-  - component: {fileID: 696524525}
-  m_Layer: 5
-  m_Name: PortraitFrame
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &696524524
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 696524523}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.8294033, y: 0.8294033, z: 0.8294033}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 922095114}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.0000092983, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &696524525
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 696524523}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: -3866555188209838272, guid: 40ee38ab9f60cc24d8f17fd27fac329b, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &696524526
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 696524523}
-  m_CullTransparentMesh: 1
 --- !u!1 &922095113
 GameObject:
   m_ObjectHideFlags: 0
@@ -701,7 +641,6 @@ RectTransform:
   m_LocalScale: {x: 3.8491678, y: 3.8491678, z: 3.8491678}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 696524524}
   - {fileID: 1721967537}
   m_Father: {fileID: 597583356}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1024,8 +963,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 15, y: -4.776}
-  m_SizeDelta: {x: 1614.256, y: 157.552}
+  m_AnchoredPosition: {x: 24.158, y: -36.963}
+  m_SizeDelta: {x: 1616.573, y: 213.766}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1477991042
 CanvasRenderer:
@@ -1055,7 +994,12 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+    eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt
+    in culpa qui officia deserunt mollit anim id est laborum.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a72668973361018499c00b8966dec13f, type: 2}
   m_sharedMaterial: {fileID: 3529121228338826141, guid: a72668973361018499c00b8966dec13f, type: 2}
@@ -1092,9 +1036,9 @@ MonoBehaviour:
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
-  m_characterSpacing: 0
-  m_wordSpacing: 0
-  m_lineSpacing: 0
+  m_characterSpacing: -2.51
+  m_wordSpacing: 5
+  m_lineSpacing: 1
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -1120,7 +1064,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 60, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1241,8 +1185,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 176.99998, y: -344}
-  m_SizeDelta: {x: 1852.35, y: 356.862}
+  m_AnchoredPosition: {x: 180.564, y: -358.254}
+  m_SizeDelta: {x: 1861.618, y: 421.734}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1640062084
 MonoBehaviour:
@@ -1316,8 +1260,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.0000016689, y: -0.0000020862}
-  m_SizeDelta: {x: 163, y: 163}
+  m_AnchoredPosition: {x: 0.000010252, y: -0.0000020266}
+  m_SizeDelta: {x: 280, y: 280}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1721967538
 CanvasRenderer:

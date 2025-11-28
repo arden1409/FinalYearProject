@@ -140,7 +140,7 @@ public class FreeDraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler,
         originalParent = transform.parent;
         originalSiblingIndex = transform.GetSiblingIndex();
 
-        // Ghi lại trạng thái trước khi di chuyển cho undo/redo
+        // Record state before moving for undo/redo
         if (UndoRedoManager.Instance != null)
         {
             UndoRedoManager.Instance.RecordActionBefore(this);
@@ -263,13 +263,13 @@ public class FreeDraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler,
         onDragEnd?.Invoke();
         onPlaced?.Invoke();
 
-        // Ghi lại trạng thái sau khi thả cho undo/redo
+        // Record state after drop for undo/redo
         if (UndoRedoManager.Instance != null)
         {
             UndoRedoManager.Instance.RecordActionAfter(this);
         }
         
-        // Phát âm thanh khi đặt item thành công
+        // Play sound when item is placed successfully
         if (SfxManager.Instance != null)
         {
             SfxManager.Instance.PlayPlaceItem();

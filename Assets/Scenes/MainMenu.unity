@@ -3493,24 +3493,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 606d60a3756acee49ae6e91e03b68b4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameFlowManager
+  characterIntroScene: Assets/Scenes/CharacterIntro.unity
   mainMenuScene: Assets/Scenes/MainMenu.unity
   levelSelectScene: Assets/Scenes/LevelSelect.unity
   storyScene: Assets/Scenes/StoryScreen.unity
   levels:
   - levelId: Lv1
     levelScene: Level1
-    storyIntroId: 
-    storyOutroId: 
+    storyIntroId: Level1_Intro
+    storyOutroId: Level1_Outro
     unlockedByDefault: 1
   - levelId: Lv2
     levelScene: Level2
-    storyIntroId: 
-    storyOutroId: 
+    storyIntroId: Level2_Intro
+    storyOutroId: Level2_Outro
     unlockedByDefault: 0
   - levelId: Lv3
     levelScene: Level3
-    storyIntroId: 
-    storyOutroId: 
+    storyIntroId: Level3_Intro
+    storyOutroId: Level3_Outro
     unlockedByDefault: 0
 --- !u!4 &1946222198
 Transform:
@@ -3681,9 +3682,9 @@ SceneRoots:
   m_Roots:
   - {fileID: 370015904}
   - {fileID: 1484116429}
-  - {fileID: 1946222198}
   - {fileID: 532381363}
   - {fileID: 1050603258}
+  - {fileID: 1946222198}
   - {fileID: 1467266814}
   - {fileID: 327719273}
   - {fileID: 409311235}

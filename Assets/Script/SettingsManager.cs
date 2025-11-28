@@ -40,7 +40,6 @@ public class SettingsManager : MonoBehaviour
     
     private void OnEnable()
     {
-        // Đảm bảo settings được áp dụng khi manager được enable
         ApplySettings();
     }
 
@@ -63,7 +62,7 @@ public class SettingsManager : MonoBehaviour
         }
     }
 
-    // Method để refresh toggles khi settings panel được mở (gọi từ PauseMenuUI)
+    // Refresh toggles when settings panel is opened (called from PauseMenuUI)
     public void RefreshToggles()
     {
         SetupToggles();
@@ -91,7 +90,6 @@ public class SettingsManager : MonoBehaviour
 
     private void ApplyMusicSettings()
     {
-        // Đồng bộ với MusicManager
         if (MusicManager.Instance != null)
         {
             MusicManager.Instance.Mute(!isMusicOn);
@@ -100,7 +98,6 @@ public class SettingsManager : MonoBehaviour
 
     private void ApplySoundSettings()
     {
-        // Đồng bộ với SfxManager
         if (SfxManager.Instance != null)
         {
             SfxManager.Instance.Mute(!isSoundOn);

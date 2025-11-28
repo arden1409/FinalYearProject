@@ -12,7 +12,7 @@ public class SfxManager : MonoBehaviour
     public AudioClip buttonClickClip;
 
     private AudioSource sfxSource;
-    private AudioSource buttonClickSource; // AudioSource riêng cho button click để giảm delay
+    private AudioSource buttonClickSource; // Separate AudioSource for button click to reduce delay
 
     private void Awake()
     {
@@ -25,32 +25,30 @@ public class SfxManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        // AudioSource chung cho các SFX khác
         sfxSource = gameObject.AddComponent<AudioSource>();
         sfxSource.playOnAwake = false;
         sfxSource.loop = false;
         sfxSource.priority = 0;
         
-        // AudioSource riêng cho button click - luôn sẵn sàng, không bị block
+        // Separate AudioSource for button click - always ready, won't be blocked
         GameObject buttonClickObj = new GameObject("ButtonClickAudioSource");
         buttonClickObj.transform.SetParent(transform);
         buttonClickSource = buttonClickObj.AddComponent<AudioSource>();
         buttonClickSource.playOnAwake = false;
         buttonClickSource.loop = false;
-        buttonClickSource.priority = 0; // Highest priority
+        buttonClickSource.priority = 0;
         buttonClickSource.volume = 1f;
-        buttonClickSource.bypassEffects = true; // Bypass effects để giảm latency
+        buttonClickSource.bypassEffects = true;
         buttonClickSource.bypassListenerEffects = true;
         buttonClickSource.bypassReverbZones = true;
     }
 
     private void Start()
     {
-        // Preload clips trong Start() để đảm bảo đã sẵn sàng
+        // Preload clips in Start() to ensure they're ready
         if (buttonClickClip != null)
         {
             buttonClickClip.LoadAudioData();
-            // Assign clip sẵn để giảm delay khi play
             buttonClickSource.clip = buttonClickClip;
         }
         if (placeItemClip != null)
@@ -66,18 +64,16 @@ public class SfxManager : MonoBehaviour
 
     public void PlayButtonClick()
     {
-        // Dùng AudioSource riêng cho button click để phát ngay lập tức
+        // Use separate AudioSource for button click to play immediately
         if (buttonClickClip == null || buttonClickSource == null)
             return;
 
-        // Đảm bảo clip đã được load
         if (!buttonClickClip.preloadAudioData)
         {
             buttonClickClip.LoadAudioData();
         }
 
-        // Dùng PlayOneShot cho button click - nhanh hơn Play() trong một số trường hợp
-        // PlayOneShot không cần stop/clip assignment, phát ngay lập tức
+        // Use PlayOneShot for button click - faster than Play() in some cases
         buttonClickSource.PlayOneShot(buttonClickClip, 1f);
     }
 
@@ -110,14 +106,12 @@ public class SfxManager : MonoBehaviour
         if (clip == null || source == null)
             return;
 
-        // Đảm bảo clip đã được load
         if (!clip.preloadAudioData)
         {
             clip.LoadAudioData();
         }
 
-        // Dùng Play() thay vì PlayOneShot để giảm delay
-        // Stop trước để đảm bảo phát ngay
+        // Use Play() instead of PlayOneShot to reduce delay
         if (source.isPlaying)
         {
             source.Stop();
@@ -126,7 +120,7 @@ public class SfxManager : MonoBehaviour
         source.clip = clip;
         source.Play();
         
-        // Force play ngay lập tức (nếu có delay do audio system)
+        // Force play immediately (in case of audio system delay)
         if (!source.isPlaying)
         {
             source.Play();

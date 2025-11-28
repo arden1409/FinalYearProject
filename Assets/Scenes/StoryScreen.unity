@@ -158,16 +158,18 @@ MonoBehaviour:
     displayTime: 0
   - storyId: Level1_Intro
     speakerName: Me
-    storyText: "The old sign is still there.\nIt must have been a lively caf\xE9
-      once."
+    storyText: 'The old sign is still there.
+
+      It must have been a lively cafe
+      once.'
     speakerPortrait: {fileID: -1702640810121441465, guid: b8c6747ac5418a44fa61ccc487a36929, type: 3}
     storyImage: {fileID: 0}
     displayTime: 0
   - storyId: Level1_Intro
     speakerName: Client Level 1
-    storyText: "Yeah\u2026 an American-style caf\xE9.\nWooden chairs, large glass
-      windows,\nthe smell of freshly roasted coffee in the air.\nBut after the pandemic\u2026
-      everything stopped."
+    storyText: "Yeah\u2026 an American-style cafe.\nWooden chairs, large glass windows,\nthe
+      smell of freshly roasted coffee in the air.\nBut after the pandemic\u2026 everything
+      stopped."
     speakerPortrait: {fileID: -1713285893933494883, guid: 32da9df6312903441bfdce08e18a21b3, type: 3}
     storyImage: {fileID: 0}
     displayTime: 0
@@ -185,17 +187,10 @@ MonoBehaviour:
     storyImage: {fileID: 0}
     displayTime: 0
   - storyId: Level1_Intro
-    speakerName: Client Level 1
+    speakerName: Me
     storyText: "I\u2019ll try to tell the cafe\u2019s story again\u2026 through its
       interior."
-    speakerPortrait: {fileID: -1713285893933494883, guid: 32da9df6312903441bfdce08e18a21b3, type: 3}
-    storyImage: {fileID: 0}
-    displayTime: 0
-  - storyId: Level1_Intro
-    speakerName: Client Level 1
-    storyText: "I\u2019ll try to tell the caf\xE9\u2019s story again\u2026 through
-      its interior."
-    speakerPortrait: {fileID: -1713285893933494883, guid: 32da9df6312903441bfdce08e18a21b3, type: 3}
+    speakerPortrait: {fileID: -1702640810121441465, guid: b8c6747ac5418a44fa61ccc487a36929, type: 3}
     storyImage: {fileID: 0}
     displayTime: 0
   - storyId: Level1_Outro
@@ -237,6 +232,187 @@ MonoBehaviour:
     speakerPortrait: {fileID: -1702640810121441465, guid: b8c6747ac5418a44fa61ccc487a36929, type: 3}
     storyImage: {fileID: 0}
     displayTime: 0
+  - storyId: Level2_Intro
+    speakerName: Client Level 2
+    storyText: Can you hear it?
+    speakerPortrait: {fileID: 6861422007500452647, guid: 13119e2fbfae23b4abb35a6c3f9da661, type: 3}
+    storyImage: {fileID: 0}
+    displayTime: 0
+  - storyId: Level2_Intro
+    speakerName: Me
+    storyText: Hear what?
+    speakerPortrait: {fileID: -1702640810121441465, guid: b8c6747ac5418a44fa61ccc487a36929, type: 3}
+    storyImage: {fileID: 0}
+    displayTime: 0
+  - storyId: Level2_Intro
+    speakerName: Client Level 2
+    storyText: 'That sound.
+
+      Every night, there used to be live jazz here.'
+    speakerPortrait: {fileID: 6861422007500452647, guid: 13119e2fbfae23b4abb35a6c3f9da661, type: 3}
+    storyImage: {fileID: 0}
+    displayTime: 0
+  - storyId: Level2_Intro
+    speakerName: Me
+    storyText: A cafe with a stage?
+    speakerPortrait: {fileID: -1702640810121441465, guid: b8c6747ac5418a44fa61ccc487a36929, type: 3}
+    storyImage: {fileID: 0}
+    displayTime: 0
+  - storyId: Level2_Intro
+    speakerName: Client Level 2
+    storyText: "Exactly.\nI used to play the saxophone here\u2026\nuntil the band
+      fell apart."
+    speakerPortrait: {fileID: 6861422007500452647, guid: 13119e2fbfae23b4abb35a6c3f9da661, type: 3}
+    storyImage: {fileID: 0}
+    displayTime: 0
+  - storyId: Level2_Intro
+    speakerName: Me
+    storyText: What kind of atmosphere do you want now?
+    speakerPortrait: {fileID: -1702640810121441465, guid: b8c6747ac5418a44fa61ccc487a36929, type: 3}
+    storyImage: {fileID: 0}
+    displayTime: 0
+  - storyId: Level2_Intro
+    speakerName: Client Level 2
+    storyText: "Vintage, quiet.\nWarm enough for people who\u2019ve lost their music\u2026\nto
+      find their way back."
+    speakerPortrait: {fileID: 6861422007500452647, guid: 13119e2fbfae23b4abb35a6c3f9da661, type: 3}
+    storyImage: {fileID: 0}
+    displayTime: 0
+  - storyId: Level2_Intro
+    speakerName: Me
+    storyText: "I can\u2019t bring the band back.\nBut I can rebuild the space they
+      once filled."
+    speakerPortrait: {fileID: -1702640810121441465, guid: b8c6747ac5418a44fa61ccc487a36929, type: 3}
+    storyImage: {fileID: 0}
+    displayTime: 0
+  - storyId: Level2_Outro
+    speakerName: Client Level 2
+    storyText: "The stage lights\u2026 they\u2019re in the right place."
+    speakerPortrait: {fileID: 6861422007500452647, guid: 13119e2fbfae23b4abb35a6c3f9da661, type: 3}
+    storyImage: {fileID: 0}
+    displayTime: 0
+  - storyId: Level2_Outro
+    speakerName: Me
+    storyText: "I didn\u2019t make them too perfect on purpose."
+    speakerPortrait: {fileID: -1702640810121441465, guid: b8c6747ac5418a44fa61ccc487a36929, type: 3}
+    storyImage: {fileID: 0}
+    displayTime: 0
+  - storyId: Level2_Outro
+    speakerName: Client Level 2
+    storyText: "Good.\nJazz doesn\u2019t need perfection. It needs emotion."
+    speakerPortrait: {fileID: 6861422007500452647, guid: 13119e2fbfae23b4abb35a6c3f9da661, type: 3}
+    storyImage: {fileID: 0}
+    displayTime: 0
+  - storyId: Level2_Outro
+    speakerName: Me
+    storyText: Do you still play?
+    speakerPortrait: {fileID: -1702640810121441465, guid: b8c6747ac5418a44fa61ccc487a36929, type: 3}
+    storyImage: {fileID: 0}
+    displayTime: 0
+  - storyId: Level2_Outro
+    speakerName: Client Level 2
+    storyText: "\u2026Maybe it\u2019s time to practice again. You reminded me why
+      I ever stood on that stage."
+    speakerPortrait: {fileID: 6861422007500452647, guid: 13119e2fbfae23b4abb35a6c3f9da661, type: 3}
+    storyImage: {fileID: 0}
+    displayTime: 0
+  - storyId: Level2_Outro
+    speakerName: Me (Monologue)
+    storyText: "Some spaces aren\u2019t just for business. They exist to preserve
+      a person\u2019s soul."
+    speakerPortrait: {fileID: -1702640810121441465, guid: b8c6747ac5418a44fa61ccc487a36929, type: 3}
+    storyImage: {fileID: 0}
+    displayTime: 0
+  - storyId: Level3_Intro
+    speakerName: Client Level 3
+    storyText: "You\u2019re the interior architect?"
+    speakerPortrait: {fileID: -2850588626377371015, guid: 5cc24bd32647fef40b2d5d23c5956dd0, type: 3}
+    storyImage: {fileID: 0}
+    displayTime: 0
+  - storyId: Level3_Intro
+    speakerName: Me
+    storyText: 'Yes.
+
+      What style are you going for?'
+    speakerPortrait: {fileID: -1702640810121441465, guid: b8c6747ac5418a44fa61ccc487a36929, type: 3}
+    storyImage: {fileID: 0}
+    displayTime: 0
+  - storyId: Level3_Intro
+    speakerName: Client Level 3
+    storyText: 'Japanese.
+
+      Simple. Clean. Not a single unnecessary detail.'
+    speakerPortrait: {fileID: -2850588626377371015, guid: 5cc24bd32647fef40b2d5d23c5956dd0, type: 3}
+    storyImage: {fileID: 0}
+    displayTime: 0
+  - storyId: Level3_Intro
+    speakerName: Me
+    storyText: "That sounds\u2026 strict."
+    speakerPortrait: {fileID: -1702640810121441465, guid: b8c6747ac5418a44fa61ccc487a36929, type: 3}
+    storyImage: {fileID: 0}
+    displayTime: 0
+  - storyId: Level3_Intro
+    speakerName: Client Level 3
+    storyText: "My father taught me how to cook. He always said: \u201CA messy space
+      leads to a messy mind.\u201D"
+    speakerPortrait: {fileID: -2850588626377371015, guid: 5cc24bd32647fef40b2d5d23c5956dd0, type: 3}
+    storyImage: {fileID: 0}
+    displayTime: 0
+  - storyId: Level3_Intro
+    speakerName: Me
+    storyText: "So this restaurant is\u2026 to remember him?"
+    speakerPortrait: {fileID: -1702640810121441465, guid: b8c6747ac5418a44fa61ccc487a36929, type: 3}
+    storyImage: {fileID: 0}
+    displayTime: 0
+  - storyId: Level3_Intro
+    speakerName: Client Level 3
+    storyText: "No. It\u2019s to make amends."
+    speakerPortrait: {fileID: -2850588626377371015, guid: 5cc24bd32647fef40b2d5d23c5956dd0, type: 3}
+    storyImage: {fileID: 0}
+    displayTime: 0
+  - storyId: Level3_Outro
+    speakerName: Client Level 3
+    storyText: "It\u2019s\u2026 very quiet."
+    speakerPortrait: {fileID: -2850588626377371015, guid: 5cc24bd32647fef40b2d5d23c5956dd0, type: 3}
+    storyImage: {fileID: 0}
+    displayTime: 0
+  - storyId: Level3_Outro
+    speakerName: Me
+    storyText: 'That was intentional.
+
+      This is a space where people can hear
+      themselves.'
+    speakerPortrait: {fileID: -1702640810121441465, guid: b8c6747ac5418a44fa61ccc487a36929, type: 3}
+    storyImage: {fileID: 0}
+    displayTime: 0
+  - storyId: Level3_Outro
+    speakerName: Client Level 3
+    storyText: 'My father passed away while I was still angry at him.
+
+      I never
+      got to say I was sorry.'
+    speakerPortrait: {fileID: -2850588626377371015, guid: 5cc24bd32647fef40b2d5d23c5956dd0, type: 3}
+    storyImage: {fileID: 0}
+    displayTime: 0
+  - storyId: Level3_Outro
+    speakerName: Me
+    storyText: But you rebuilt this place.
+    speakerPortrait: {fileID: -1702640810121441465, guid: b8c6747ac5418a44fa61ccc487a36929, type: 3}
+    storyImage: {fileID: 0}
+    displayTime: 0
+  - storyId: Level3_Outro
+    speakerName: Client Level 3
+    storyText: "Yeah.\nMaybe\u2026 this is the apology I was too late to give."
+    speakerPortrait: {fileID: -2850588626377371015, guid: 5cc24bd32647fef40b2d5d23c5956dd0, type: 3}
+    storyImage: {fileID: 0}
+    displayTime: 0
+  - storyId: Level3_Outro
+    speakerName: Me (Monologue)
+    storyText: Not every structure is built from bricks and stone. Some are built
+      from memories.
+    speakerPortrait: {fileID: -1702640810121441465, guid: b8c6747ac5418a44fa61ccc487a36929, type: 3}
+    storyImage: {fileID: 0}
+    displayTime: 0
   storyPanel: {fileID: 597583355}
   speakerNameText: {fileID: 321171381}
   storyText: {fileID: 1477991043}
@@ -246,7 +422,7 @@ MonoBehaviour:
   skipButton: {fileID: 1340337354}
   autoAdvance: 0
   fadeDuration: 0.3
-  manualStoryId: Level1_Outro
+  manualStoryId: 
 --- !u!4 &186256278
 Transform:
   m_ObjectHideFlags: 0
@@ -298,7 +474,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.1, g: 0.1, b: 0.1, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0

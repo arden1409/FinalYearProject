@@ -3,21 +3,21 @@ using UnityEngine.UI;
 using TMPro;
 
 /// <summary>
-/// Nút chọn level trong Level Select.
-/// - Gán lên từng button, điền levelId trùng với GameFlowManager.levels[i].levelId.
-/// - Có thể dùng lockOverlay + label để hiển thị trạng thái.
+/// Level selection button in Level Select screen.
+/// Attach to each button, set levelId to match GameFlowManager.levels[i].levelId.
+/// Use lockOverlay + label to show status.
 /// </summary>
 [RequireComponent(typeof(Button))]
 public class LevelButton : MonoBehaviour
 {
-    [Header("Thông tin level")]
+    [Header("Level Info")]
     public string levelId = "Level1";
 
-    [Header("UI tuỳ chọn")]
-    [Tooltip("Overlay xám + icon khoá (bật khi level bị khoá)")]
+    [Header("UI Options")]
+    [Tooltip("Gray overlay + lock icon (shown when level is locked)")]
     public GameObject lockOverlay;
 
-    [Tooltip("Text hiển thị tên / score")]
+    [Tooltip("Text to display level name / score")]
     public TextMeshProUGUI label;
 
     private Button button;
@@ -37,7 +37,7 @@ public class LevelButton : MonoBehaviour
     {
         if (GameFlowManager.Instance == null)
         {
-            // Khi test scene trực tiếp, cho phép bấm luôn
+            // When testing scene directly, allow clicking
             if (lockOverlay != null) lockOverlay.SetActive(false);
             button.interactable = true;
             if (label != null) label.text = levelId;
@@ -92,7 +92,7 @@ public class LevelButton : MonoBehaviour
         }
 
         Debug.Log($"[LevelButton] Start level {levelId}");
-        GameFlowManager.Instance.StartLevel(levelId);
+        GameFlowManager.Instance.StartLevel(levelId, playStoryIntro: true);
     }
 }
 

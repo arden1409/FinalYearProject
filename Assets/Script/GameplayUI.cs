@@ -29,7 +29,7 @@ public class GameplayUI : MonoBehaviour
 
     private void Start()
     {
-        // Tìm hoặc tạo UndoRedoManager
+        // Find or create UndoRedoManager
         undoRedoManager = FindFirstObjectByType<UndoRedoManager>();
         if (undoRedoManager == null)
         {
@@ -37,7 +37,7 @@ public class GameplayUI : MonoBehaviour
             undoRedoManager = undoRedoObj.AddComponent<UndoRedoManager>();
         }
 
-        // Tìm hoặc tạo HintManager
+        // Find or create HintManager
         hintManager = FindFirstObjectByType<HintManager>();
         if (hintManager == null)
         {
@@ -45,13 +45,10 @@ public class GameplayUI : MonoBehaviour
             hintManager = hintObj.AddComponent<HintManager>();
         }
 
-        // Setup menu button
         if (menuButton != null)
         {
             menuButton.onClick.AddListener(OnMenuButtonClicked);
         }
-
-        // Setup action buttons
         if (undoButton != null)
         {
             undoButton.onClick.AddListener(OnUndoClicked);
@@ -68,7 +65,6 @@ public class GameplayUI : MonoBehaviour
             hintManager.SetHintButton(hintButton);
         }
 
-        // Setup button images
         SetupButtonImages();
     }
 
@@ -119,7 +115,6 @@ public class GameplayUI : MonoBehaviour
 
     private void Update()
     {
-        // Cập nhật trạng thái các nút undo/redo
         UpdateUndoRedoButtons();
     }
 

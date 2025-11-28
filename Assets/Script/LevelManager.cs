@@ -38,7 +38,17 @@ public class LevelManager : MonoBehaviour
     
     void Start()
     {
-        // Đếm tổng số items từ cardboard box
+        // Check if Complete Panel should be shown after Story Outro
+        if (GameFlowManager.Instance != null)
+        {
+            if (GameFlowManager.Instance.ShouldShowCompletePanel(out int score))
+            {
+                ShowCompletePanel(score);
+                return;
+            }
+        }
+        
+        // Count total items from cardboard box
         if (cardboardBox != null)
         {
             totalItems = 0;
@@ -52,10 +62,7 @@ public class LevelManager : MonoBehaviour
             }
         }
         
-        // Setup UI
         UpdateUI();
-        
-        // Setup buttons
         if (restartButton != null)
             restartButton.onClick.AddListener(RestartLevel);
             
@@ -75,11 +82,8 @@ public class LevelManager : MonoBehaviour
     
     void Update()
     {
-        // Cập nhật UI mỗi frame
         UpdateUI();
         UpdateTimer();
-        
-        // Kiểm tra điều kiện hoàn thành level
         CheckLevelCompletion();
     }
     
@@ -150,9 +154,6 @@ public class LevelManager : MonoBehaviour
         foreach (var zone in dropZones)
         {
             if (zone == null) continue;
-            
-            // Đếm số cells đã occupied trong zone này
-            // (Cần thêm method trong GridSnapZone để đếm occupied cells)
             correct += CountOccupiedCellsInZone(zone);
         }
         
@@ -171,21 +172,47 @@ public class LevelManager : MonoBehaviour
         timerRunning = false;
         float elapsed = Time.time - levelStartTime;
         starsEarned = CalculateStarRating(elapsed);
-        UpdateStarUI(starsEarned);
-
-        if (levelCompletePanel != null)
-        {
-            levelCompletePanel.SetActive(true);
-        }
 
         if (doneButton != null)
         {
             doneButton.gameObject.SetActive(false);
         }
 
-        GameFlowManager.Instance?.CompleteLevel(starsEarned, autoTransition: false);
+        GameFlowManager.Instance?.CompleteLevel(starsEarned, autoTransition: true);
         
         Debug.Log("Level Completed! Stars: " + starsEarned);
+    }
+    
+    // Show Complete Panel (called after Story Outro)
+    private void ShowCompletePanel(int score)
+    {
+        levelCompleted = true;
+        starsEarned = score;
+        UpdateStarUI(starsEarned);
+
+        if (restartButton != null)
+        {
+            restartButton.onClick.RemoveAllListeners();
+            restartButton.onClick.AddListener(RestartLevel);
+        }
+            
+        if (nextLevelButton != null)
+        {
+            nextLevelButton.onClick.RemoveAllListeners();
+            nextLevelButton.onClick.AddListener(LoadNextLevel);
+        }
+        
+        if (levelCompletePanel != null)
+        {
+            levelCompletePanel.SetActive(true);
+        }
+        
+        if (doneButton != null)
+        {
+            doneButton.gameObject.SetActive(false);
+        }
+        
+        Debug.Log("Showing Complete Panel with score: " + score);
     }
 
     private int CalculateStarRating(float elapsedSeconds)
@@ -292,7 +319,7 @@ public class LevelManager : MonoBehaviour
     {
         RegisterSpawnedObject(item != null ? item.gameObject : null);
     }
-
+    
     public void RegisterSpawnedObject(GameObject obj)
     {
         if (obj == null) return;

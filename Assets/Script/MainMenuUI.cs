@@ -19,7 +19,7 @@ public class MainMenuUI : MonoBehaviour
         {
             SfxManager.Instance.PlayButtonClick();
         }
-        // Tiếp tục từ level đã chơi gần nhất thay vì reset về level 1
+        // Continue from most recent level instead of resetting to level 1
         GameFlowManager.Instance?.ContinueGame();
     }
 
@@ -44,7 +44,6 @@ public class MainMenuUI : MonoBehaviour
             bool isOpening = !settingsPanel.activeSelf;
             settingsPanel.SetActive(!settingsPanel.activeSelf);
             
-            // Refresh toggles khi mở settings panel
             if (isOpening && SettingsManager.Instance != null)
             {
                 SettingsManager.Instance.RefreshToggles();

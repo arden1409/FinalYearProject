@@ -19,13 +19,11 @@ public class PauseMenuUI : MonoBehaviour
 
     private void Start()
     {
-        // Ẩn panel pause ban đầu
         if (pausePanel != null)
         {
             pausePanel.SetActive(false);
         }
 
-        // Setup buttons
         if (continueButton != null)
         {
             continueButton.onClick.AddListener(OnContinue);
@@ -41,13 +39,11 @@ public class PauseMenuUI : MonoBehaviour
             backToMenuButton.onClick.AddListener(OnBackToMenu);
         }
 
-        // Ẩn settings panel ban đầu
         if (settingsPanel != null)
         {
             settingsPanel.SetActive(false);
         }
 
-        // Setup settings back button
         if (settingsBackButton != null)
         {
             settingsBackButton.onClick.AddListener(OnSettingsBack);
@@ -56,30 +52,27 @@ public class PauseMenuUI : MonoBehaviour
 
     private void Update()
     {
-        // Kiểm tra phím ESC để pause (hỗ trợ cả Input System mới và cũ)
+        // Check ESC key for pause (supports both new and old Input System)
         bool escapePressed = false;
         
 #if ENABLE_INPUT_SYSTEM
-        // Sử dụng Input System mới
         if (Keyboard.current != null)
         {
             escapePressed = Keyboard.current.escapeKey.wasPressedThisFrame;
         }
 #else
-        // Sử dụng Input Manager cũ
         escapePressed = Input.GetKeyDown(KeyCode.Escape);
 #endif
 
         if (escapePressed)
         {
-            // Nếu đang ở Settings Panel, quay về Pause Panel
+            // If in Settings Panel, return to Pause Panel
             if (settingsPanel != null && settingsPanel.activeSelf)
             {
                 OnSettingsBack();
             }
             else
             {
-                // Nếu đang ở Pause Panel, toggle pause
                 TogglePause();
             }
         }
@@ -102,7 +95,6 @@ public class PauseMenuUI : MonoBehaviour
         isPaused = true;
         Time.timeScale = 0f;
 
-        // Hiện Pause Panel (overlay đen) và Pause Menu Background
         if (pausePanel != null)
         {
             pausePanel.SetActive(true);
@@ -113,7 +105,6 @@ public class PauseMenuUI : MonoBehaviour
             pauseMenuBackground.SetActive(true);
         }
 
-        // Ẩn settings panel nếu đang mở
         if (settingsPanel != null)
         {
             settingsPanel.SetActive(false);
@@ -152,21 +143,16 @@ public class PauseMenuUI : MonoBehaviour
             SfxManager.Instance.PlayButtonClick();
         }
         
-        // Luôn mở Settings Panel: Ẩn Pause Menu Background, hiện Settings Panel
-        // Giữ PausePanel (overlay đen) để SettingsPanel có thể hiển thị
         if (settingsPanel != null)
         {
-            // Ẩn Pause Menu Background (menu chính với 3 nút)
+            // Hide Pause Menu Background, show Settings Panel
             if (pauseMenuBackground != null)
             {
                 pauseMenuBackground.SetActive(false);
             }
             
-            // Hiện Settings Panel
             settingsPanel.SetActive(true);
             
-            // Refresh toggles khi mở settings panel
-            // SettingsPanelHelper sẽ tự động gán toggles khi settings panel được enable
             if (SettingsManager.Instance != null)
             {
                 SettingsManager.Instance.RefreshToggles();
@@ -181,19 +167,15 @@ public class PauseMenuUI : MonoBehaviour
             SfxManager.Instance.PlayButtonClick();
         }
         
-        // Đóng settings panel và hiện lại pause menu background
         if (settingsPanel != null)
         {
             settingsPanel.SetActive(false);
         }
         
-        // Hiện lại Pause Menu Background (menu chính)
         if (pauseMenuBackground != null)
         {
             pauseMenuBackground.SetActive(true);
         }
-        
-        // PausePanel (overlay đen) vẫn giữ nguyên active
     }
 
     public void OnBackToMenu()
@@ -203,10 +185,8 @@ public class PauseMenuUI : MonoBehaviour
             SfxManager.Instance.PlayButtonClick();
         }
         
-        // Resume game trước khi quay về menu
         ResumeGame();
 
-        // Load main menu
         if (GameFlowManager.Instance != null)
         {
             GameFlowManager.Instance.LoadMainMenu();
@@ -224,7 +204,6 @@ public class PauseMenuUI : MonoBehaviour
 
     private void OnDestroy()
     {
-        // Đảm bảo time scale được reset khi destroy
         Time.timeScale = 1f;
     }
 }
